@@ -1,0 +1,1667 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Green Credits Store — Karuuna</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap"
+    rel="stylesheet" />
+
+  <style>
+    /* ── Karuuna Index-matched Design Tokens ── */
+    :root {
+      --bg: #0f1a10;
+      --bg-2: #111f12;
+      --surface: rgba(255, 255, 255, 0.04);
+      --surface-solid: #172318;
+      --surface-2: rgba(255, 255, 255, 0.06);
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --border: rgba(255, 255, 255, 0.08);
+      --accent: #a8c57e;
+      --accent-dim: rgba(168, 197, 126, 0.12);
+      --accent-glow: rgba(168, 197, 126, 0.3);
+      --accent-2: #7db87d;
+      --gold: #f0c060;
+      --gold-dim: rgba(240, 192, 96, 0.12);
+      --text: #eef2ee;
+      --text-muted: #8fa88f;
+      --danger: #ef4444;
+      --radius-sm: 10px;
+      --radius-md: 16px;
+      --radius-lg: 20px;
+      --radius-xl: 28px;
+      --shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+      --shadow-glow: 0 0 32px rgba(168, 197, 126, 0.18);
+      --font: 'Manrope', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+    }
+
+    [data-theme="light"] {
+      --bg: #f4faf2;
+      --bg-2: #edf7ea;
+      --surface: rgba(0, 0, 0, 0.03);
+      --surface-solid: #ffffff;
+      --surface-2: rgba(0, 0, 0, 0.04);
+      --card-bg: rgba(255, 255, 255, 0.9);
+      --border: rgba(0, 0, 0, 0.08);
+      --accent: #5a8a3a;
+      --accent-dim: rgba(90, 138, 58, 0.1);
+      --accent-glow: rgba(90, 138, 58, 0.2);
+      --text: #1a2e1a;
+      --text-muted: #527052;
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      --shadow-glow: 0 0 32px rgba(90, 138, 58, 0.2);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(100, 160, 80, 0.18) 0%, transparent 60%),
+        radial-gradient(circle at 1px 1px, rgba(168, 197, 126, 0.07) 1px, transparent 0);
+      background-size: 100% 100%, 32px 32px;
+      color: var(--text);
+      min-height: 100vh;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    [data-theme="light"] body {
+      background-image:
+        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(120, 180, 90, 0.12) 0%, transparent 55%),
+        radial-gradient(circle at 1px 1px, rgba(90, 138, 58, 0.07) 1px, transparent 0);
+      background-size: 100% 100%, 32px 32px;
+    }
+
+    /* ── Page Transition ── */
+    #page-transition {
+      position: fixed;
+      inset: 0;
+      z-index: 9998;
+      background: var(--bg);
+      pointer-events: none;
+      animation: fadeOutPage 0.45s ease 0.05s forwards;
+    }
+
+    @keyframes fadeOutPage {
+      from {
+        opacity: 1;
+      }
+
+      to {
+        opacity: 0;
+      }
+    }
+
+    /* ── Navbar ── */
+    #mainNav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 999;
+      background: rgba(15, 26, 16, 0.88);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(168, 197, 126, 0.12);
+      padding: 0.75rem 0;
+      transition: background 0.3s;
+    }
+
+    [data-theme="light"] #mainNav {
+      background: rgba(244, 250, 242, 0.9);
+      border-bottom-color: rgba(90, 138, 58, 0.15);
+    }
+
+    .navbar-brand {
+      font-family: var(--font);
+      font-weight: 800;
+      font-size: 1.25rem;
+      color: var(--text) !important;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+    }
+
+    /* ── Blobs — exact index page match ── */
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(90px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .blob-1 {
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, #4a7c3f 0%, transparent 70%);
+      top: -200px;
+      right: -150px;
+      opacity: 0.55;
+    }
+
+    .blob-2 {
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, #2d5a27 0%, transparent 70%);
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0.3;
+    }
+
+    .blob-3 {
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, #3a6b34 0%, transparent 70%);
+      bottom: -100px;
+      left: -150px;
+      opacity: 0.45;
+    }
+
+    /* ── Buttons ── */
+    .btn-primary-k {
+      background: linear-gradient(135deg, #a8c57e, #7aaa50);
+      color: #0f1a10;
+      font-family: var(--font);
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: 0.02em;
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.15s, box-shadow 0.15s, filter 0.15s;
+      text-decoration: none;
+      padding: 0.6rem 1.2rem;
+    }
+
+    .btn-primary-k:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(168, 197, 126, 0.35);
+      filter: brightness(1.08);
+    }
+
+    .btn-primary-k:active {
+      transform: translateY(0);
+    }
+
+    .btn-outline-k {
+      background: transparent;
+      color: var(--accent);
+      border: 1.5px solid var(--accent);
+      font-family: var(--font);
+      font-weight: 600;
+      font-size: 0.88rem;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      transition: all 0.2s;
+      text-decoration: none;
+      padding: 0.5rem 1.1rem;
+    }
+
+    .btn-outline-k:hover {
+      background: var(--accent-dim);
+      color: var(--accent);
+    }
+
+    .btn-ghost {
+      background: var(--card-bg);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      font-family: var(--font);
+      font-weight: 600;
+      font-size: 0.85rem;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s;
+      padding: 0.45rem 1rem;
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-dim);
+    }
+
+    /* ── Theme Toggle ── */
+    #themeToggle {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.2s;
+    }
+
+    #themeToggle:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* ── Credits Badge ── */
+    .credits-badge {
+      background: var(--gold-dim);
+      border: 1px solid rgba(240, 192, 96, 0.3);
+      border-radius: 999px;
+      padding: 0.35rem 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font);
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: var(--gold);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .credits-badge:hover {
+      background: rgba(240, 192, 96, 0.2);
+    }
+
+    /* ── Hero Section ── */
+    .hero-section {
+      padding: 8rem 0 4rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(168, 197, 126, 0.1);
+      border: 1px solid rgba(168, 197, 126, 0.25);
+      border-radius: 999px;
+      padding: 0.35rem 1rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-title {
+      font-family: var(--font);
+      font-weight: 900;
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      color: var(--text);
+    }
+
+    .hero-title .accent-word {
+      color: var(--accent);
+    }
+
+    .hero-sub {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      line-height: 1.7;
+      max-width: 520px;
+      margin-top: 1rem;
+    }
+
+    /* ── Stats Bar ── */
+    .stats-bar {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      margin-top: 2.5rem;
+    }
+
+    .stat-num {
+      font-family: var(--font);
+      font-weight: 800;
+      font-size: 1.6rem;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+    }
+
+    /* ── Balance Card ── */
+    .balance-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(168, 197, 126, 0.2);
+      border-radius: var(--radius-xl);
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(168, 197, 126, 0.1);
+    }
+
+    .balance-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(168, 197, 126, 0.07) 0%, transparent 55%);
+      pointer-events: none;
+    }
+
+    .balance-ring {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      background: conic-gradient(var(--accent) 220deg, rgba(168, 197, 126, 0.15) 0deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      position: relative;
+    }
+
+    .balance-ring::after {
+      content: '';
+      position: absolute;
+      width: 82px;
+      height: 82px;
+      border-radius: 50%;
+      background: #172318;
+    }
+
+    .balance-ring-inner {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .balance-ring-inner .num {
+      font-family: var(--font);
+      font-weight: 900;
+      font-size: 1.5rem;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .balance-ring-inner .lbl {
+      font-size: 0.6rem;
+      color: var(--text-muted);
+    }
+
+    .balance-label {
+      font-family: var(--font);
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: 0.3rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .balance-amount {
+      font-family: var(--font);
+      font-weight: 900;
+      font-size: 2.8rem;
+      color: var(--gold);
+      text-align: center;
+      line-height: 1;
+    }
+
+    .balance-amount span {
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    .mini-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem;
+      margin-top: 1.5rem;
+    }
+
+    .mini-stat {
+      background: rgba(168, 197, 126, 0.06);
+      border-radius: var(--radius-sm);
+      padding: 0.8rem 1rem;
+      border: 1px solid rgba(168, 197, 126, 0.12);
+    }
+
+    .mini-stat .ms-num {
+      font-family: var(--font);
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--text);
+    }
+
+    .mini-stat .ms-lbl {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    /* ── Filter Bar ── */
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-chip {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 0.45rem 1.1rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: var(--font);
+    }
+
+    .filter-chip:hover,
+    .filter-chip.active {
+      background: rgba(168, 197, 126, 0.12);
+      border-color: rgba(168, 197, 126, 0.4);
+      color: var(--accent);
+    }
+
+    .k-search {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.5rem 1rem 0.5rem 2.5rem;
+      color: var(--text);
+      font-size: 0.88rem;
+      font-family: var(--font-body);
+      outline: none;
+      transition: border-color 0.2s;
+      width: 220px;
+    }
+
+    .k-search:focus {
+      border-color: rgba(168, 197, 126, 0.5);
+    }
+
+    .k-search::placeholder {
+      color: var(--text-muted);
+    }
+
+    .search-wrap {
+      position: relative;
+    }
+
+    .search-wrap i {
+      position: absolute;
+      left: 0.8rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    /* ── Product Cards ── */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .product-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+      cursor: pointer;
+      position: relative;
+      backdrop-filter: blur(8px);
+    }
+
+    .product-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 0 32px rgba(168, 197, 126, 0.15), var(--shadow);
+      border-color: rgba(168, 197, 126, 0.3);
+    }
+
+    .product-img-wrap {
+      position: relative;
+      height: 200px;
+      overflow: hidden;
+      background: var(--surface-2);
+    }
+
+    .product-img-wrap::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.04) 50%, transparent 100%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      z-index: 0;
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: -200% 0;
+      }
+
+      100% {
+        background-position: 200% 0;
+      }
+    }
+
+    .product-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+      display: block;
+      position: relative;
+      z-index: 1;
+    }
+
+    .product-img-wrap img.loaded {
+      animation: none;
+    }
+
+    .product-card:hover .product-img-wrap img {
+      transform: scale(1.07);
+    }
+
+    .product-img-wrap .product-emoji {
+      font-size: 5rem;
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s;
+      z-index: 1;
+    }
+
+    .product-card:hover .product-emoji {
+      transform: scale(1.1) rotate(-3deg);
+    }
+
+    .product-badge {
+      position: absolute;
+      top: 0.75rem;
+      left: 0.75rem;
+      background: var(--accent);
+      color: #0f1a10;
+      font-family: var(--font);
+      font-weight: 800;
+      font-size: 0.7rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+    }
+
+    .product-badge.sale {
+      background: var(--gold);
+      color: #1a1000;
+    }
+
+    .product-badge.new {
+      background: #60a5fa;
+      color: #00153a;
+    }
+
+    .wishlist-btn {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      background: rgba(15, 26, 16, 0.75);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.2s;
+      font-size: 0.9rem;
+    }
+
+    .wishlist-btn:hover,
+    .wishlist-btn.active {
+      color: #ef4444;
+      border-color: #ef4444;
+      background: rgba(239, 68, 68, 0.1);
+    }
+
+    .product-body {
+      padding: 1.1rem 1.2rem 1.3rem;
+    }
+
+    .product-category {
+      font-size: 0.72rem;
+      color: var(--accent);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.35rem;
+    }
+
+    .product-name {
+      font-family: var(--font);
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text);
+      line-height: 1.3;
+      margin-bottom: 0.5rem;
+    }
+
+    .product-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .product-rating {
+      font-size: 0.78rem;
+      color: var(--gold);
+    }
+
+    .product-reviews {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .eco-tags {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .eco-tag {
+      background: rgba(168, 197, 126, 0.1);
+      border: 1px solid rgba(168, 197, 126, 0.2);
+      border-radius: 999px;
+      padding: 0.15rem 0.55rem;
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .product-price-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .product-price {
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+    }
+
+    .price-credits {
+      font-family: var(--font);
+      font-weight: 800;
+      font-size: 1.2rem;
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .price-credits i {
+      font-size: 1rem;
+    }
+
+    .price-old {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-decoration: line-through;
+    }
+
+    .add-btn {
+      background: linear-gradient(135deg, #a8c57e, #7aaa50);
+      border: none;
+      border-radius: var(--radius-sm);
+      color: #0f1a10;
+      font-weight: 700;
+      font-size: 0.8rem;
+      padding: 0.5rem 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-family: var(--font);
+      transition: all 0.2s;
+    }
+
+    .add-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 16px rgba(168, 197, 126, 0.35);
+      filter: brightness(1.08);
+    }
+
+    .add-btn:active {
+      transform: scale(0.97);
+    }
+
+    /* ── Cart Drawer ── */
+    .cart-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 1500;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .cart-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .cart-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 380px;
+      max-width: 100vw;
+      background: #172318;
+      border-left: 1px solid rgba(168, 197, 126, 0.15);
+      z-index: 1600;
+      transform: translateX(100%);
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cart-drawer.open {
+      transform: translateX(0);
+    }
+
+    .cart-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid rgba(168, 197, 126, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .cart-title {
+      font-family: var(--font);
+      font-weight: 800;
+      font-size: 1.2rem;
+      color: var(--text);
+    }
+
+    .cart-close {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.2s;
+    }
+
+    .cart-close:hover {
+      color: var(--danger);
+      border-color: var(--danger);
+    }
+
+    .cart-items {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem;
+    }
+
+    .cart-item {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      padding: 0.9rem;
+      background: rgba(168, 197, 126, 0.05);
+      border: 1px solid rgba(168, 197, 126, 0.1);
+      border-radius: var(--radius-md);
+      margin-bottom: 0.75rem;
+    }
+
+    .cart-item-emoji {
+      font-size: 2rem;
+      width: 48px;
+      text-align: center;
+    }
+
+    .cart-item-info {
+      flex: 1;
+    }
+
+    .cart-item-name {
+      font-family: var(--font);
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: var(--text);
+    }
+
+    .cart-item-price {
+      font-size: 0.8rem;
+      color: var(--gold);
+      font-weight: 600;
+      margin-top: 0.15rem;
+    }
+
+    .cart-qty {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .qty-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      width: 26px;
+      height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      transition: all 0.15s;
+    }
+
+    .qty-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .qty-num {
+      font-family: var(--font);
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--text);
+      min-width: 20px;
+      text-align: center;
+    }
+
+    .cart-empty {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 1.5rem;
+      text-align: center;
+    }
+
+    .cart-empty-icon {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      opacity: 0.4;
+    }
+
+    .cart-empty p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .cart-footer {
+      padding: 1.25rem 1.5rem;
+      border-top: 1px solid rgba(168, 197, 126, 0.12);
+    }
+
+    .cart-total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .cart-total-label {
+      font-family: var(--font);
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .cart-total-val {
+      font-family: var(--font);
+      font-weight: 800;
+      font-size: 1.3rem;
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    /* ── How It Works ── */
+    .how-section {
+      padding: 4rem 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+
+    .section-title {
+      font-family: var(--font);
+      font-weight: 900;
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      letter-spacing: -0.03em;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .section-sub {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    .step-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(168, 197, 126, 0.15);
+      border-radius: var(--radius-lg);
+      padding: 1.8rem;
+      text-align: center;
+      transition: all 0.25s;
+      position: relative;
+    }
+
+    .step-card:hover {
+      border-color: rgba(168, 197, 126, 0.35);
+      transform: translateY(-4px);
+      box-shadow: 0 0 32px rgba(168, 197, 126, 0.12);
+    }
+
+    .step-num {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(168, 197, 126, 0.1);
+      border: 2px solid rgba(168, 197, 126, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font);
+      font-weight: 900;
+      font-size: 1.1rem;
+      color: var(--accent);
+      margin: 0 auto 1rem;
+    }
+
+    .step-icon {
+      font-size: 2rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .step-title {
+      font-family: var(--font);
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .step-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* ── K Alert ── */
+    .k-alert {
+      border-radius: var(--radius-md);
+      padding: 0.9rem 1.1rem;
+      display: flex;
+      gap: 0.75rem;
+      font-size: 0.88rem;
+    }
+
+    .k-alert.info {
+      background: rgba(168, 197, 126, 0.07);
+      border: 1px solid rgba(168, 197, 126, 0.18);
+      color: var(--text-muted);
+    }
+
+    .k-alert.info i {
+      color: var(--accent);
+      margin-top: 0.1rem;
+    }
+
+    /* ── Toast ── */
+    .toast-container-k {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .k-toast {
+      background: #172318;
+      border: 1px solid rgba(168, 197, 126, 0.3);
+      border-radius: var(--radius-md);
+      padding: 0.85rem 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.88rem;
+      color: var(--text);
+      box-shadow: var(--shadow);
+      animation: slideToast 0.3s ease;
+      max-width: 300px;
+    }
+
+    .k-toast i {
+      color: var(--accent);
+      font-size: 1rem;
+    }
+
+    @keyframes slideToast {
+      from {
+        transform: translateX(120%);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    /* ── Cart Count Badge ── */
+    .cart-count {
+      background: var(--accent);
+      color: #0f1a10;
+      font-size: 0.65rem;
+      font-weight: 800;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font);
+      position: absolute;
+      top: -6px;
+      right: -6px;
+    }
+
+    /* ── Section Divider ── */
+    .section-divider {
+      border: none;
+      border-top: 1px solid rgba(168, 197, 126, 0.1);
+      margin: 0;
+    }
+
+    /* ── Sort Select ── */
+    .k-select {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 0.82rem;
+      padding: 0.48rem 0.9rem;
+      outline: none;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+
+    .k-select:focus {
+      border-color: rgba(168, 197, 126, 0.5);
+    }
+
+    .k-select option {
+      background: #172318;
+    }
+
+    /* ── Reveal ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s, transform 0.5s;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .stats-bar {
+        gap: 1.2rem;
+      }
+
+      .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      }
+
+      .cart-drawer {
+        width: 100vw;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="page-transition"></div>
+
+  <!-- Blobs — exact index page match -->
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+
+  <!-- Toast Container -->
+  <div class="toast-container-k" id="toastContainer"></div>
+
+  <!-- Cart Overlay & Drawer -->
+  <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+  <div class="cart-drawer" id="cartDrawer">
+    <div class="cart-header">
+      <div class="cart-title">🛒 Your Green Cart</div>
+      <button class="cart-close" onclick="closeCart()"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <div class="cart-items" id="cartItems">
+      <div class="cart-empty">
+        <div class="cart-empty-icon">🌱</div>
+        <p>Your cart is empty.<br>Add some eco products!</p>
+      </div>
+    </div>
+    <div class="cart-footer" id="cartFooter" style="display:none">
+      <div class="cart-total-row">
+        <span class="cart-total-label">Total Credits</span>
+        <span class="cart-total-val"><i class="bi bi-patch-check-fill"></i> <span id="cartTotal">0</span> GC</span>
+      </div>
+      <div class="k-alert info mb-3" style="border-radius:var(--radius-sm);padding:0.65rem 0.9rem;font-size:0.8rem">
+        <i class="bi bi-lightning-charge-fill"></i>
+        <span>You have <strong id="balanceInDrawer" style="color:var(--gold)">840 GC</strong> available</span>
+      </div>
+      <button class="btn-primary-k w-100" style="padding:0.85rem" onclick="checkout()">
+        <i class="bi bi-bag-check me-2"></i>Redeem & Checkout
+      </button>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <nav id="mainNav" class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href="/index/"><img src="{% static 'image/weblogo.png' %}" alt="logo"
+          width="30">Karuuna</a>
+      <div class="d-flex align-items-center gap-3">
+        <div class="credits-badge" onclick="openCart()">
+          <i class="bi bi-patch-check-fill"></i>
+          <span id="navCredits">840 GC</span>
+        </div>
+        <div style="position:relative; cursor:pointer" onclick="openCart()">
+          <button class="btn-ghost"><i class="bi bi-bag"></i> Cart</button>
+          <span class="cart-count" id="cartCountBadge" style="display:none">0</span>
+        </div>
+        <button id="themeToggle" title="Toggle theme" onclick="toggleTheme()">
+          <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main style="position:relative;z-index:1;">
+
+    <!-- Hero -->
+    <section class="hero-section">
+      <div class="container">
+        <div class="row align-items-center g-5">
+          <div class="col-lg-6 reveal visible">
+            <div class="hero-tag">
+              <i class="bi bi-leaf-fill"></i> Green Credits Marketplace
+            </div>
+            <h1 class="hero-title">
+              Spend Your Credits on<br><span class="accent-word">Planet-First</span> Products
+            </h1>
+            <p class="hero-sub">
+              Every volunteer hour you give earns Green Credits. Redeem them here for sustainable, eco-certified
+              products — guilt-free, planet-approved.
+            </p>
+            <div class="stats-bar">
+              <div class="stat-item">
+                <div class="stat-num">2,400+</div>
+                <div class="stat-label">Eco Products</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-num">140+</div>
+                <div class="stat-label">Verified Brands</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-num">18K</div>
+                <div class="stat-label">Credits Redeemed</div>
+              </div>
+            </div>
+            <div class="d-flex gap-3 mt-4 flex-wrap">
+              <a href="#products" class="btn-primary-k ripple-btn" style="padding:0.75rem 1.5rem">
+                <i class="bi bi-bag-heart me-2"></i>Start Shopping
+              </a>
+              <a href="#how" class="btn-outline-k" style="padding:0.72rem 1.3rem">
+                <i class="bi bi-play-circle"></i> How It Works
+              </a>
+            </div>
+          </div>
+
+          <div class="col-lg-6 reveal visible">
+            <div class="balance-card">
+              <div class="balance-label">Your Green Credit Balance</div>
+              <div class="balance-amount mt-2">840 <span>GC</span></div>
+              <div style="text-align:center; color:var(--text-muted); font-size:0.8rem; margin-top:0.4rem">≈ ₹1,680
+                purchasing power</div>
+
+              <div class="mini-stats mt-3">
+                <div class="mini-stat">
+                  <div class="ms-num">+120</div>
+                  <div class="ms-lbl">Earned this month</div>
+                </div>
+                <div class="mini-stat">
+                  <div class="ms-num">320</div>
+                  <div class="ms-lbl">Credits redeemed</div>
+                </div>
+                <div class="mini-stat">
+                  <div class="ms-num">14</div>
+                  <div class="ms-lbl">Volunteer hours</div>
+                </div>
+                <div class="mini-stat">
+                  <div class="ms-num">🥈 Silver</div>
+                  <div class="ms-lbl">Eco tier</div>
+                </div>
+              </div>
+
+              <div
+                style="margin-top:1.5rem; background:var(--surface-2); border-radius:var(--radius-sm); overflow:hidden; height:8px;">
+                <div
+                  style="height:100%; width:62%; background:linear-gradient(90deg,var(--accent),var(--accent-2)); border-radius:999px; position:relative;">
+                  <div
+                    style="position:absolute;right:-4px;top:-3px;width:14px;height:14px;background:var(--gold);border-radius:50%;border:2px solid var(--surface);">
+                  </div>
+                </div>
+              </div>
+              <div
+                style="display:flex;justify-content:space-between; margin-top:0.5rem; font-size:0.72rem; color:var(--text-muted);">
+                <span>Silver (840 GC)</span>
+                <span>Gold at 1,500 GC</span>
+              </div>
+
+              <div class="k-alert info mt-3">
+                <i class="bi bi-lightning-charge-fill"></i>
+                <div><strong style="color:var(--accent)">660 GC away</strong> from Gold tier — 10% bonus on all
+                  redemptions!</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- Products -->
+    <section id="products" style="padding:4rem 0; position:relative; z-index:1;">
+      <div class="container">
+        <div class="row align-items-center mb-4 g-3">
+          <div class="col">
+            <div class="section-label">Shop</div>
+            <h2 class="section-title" style="margin-bottom:0">Eco Products</h2>
+          </div>
+          <div class="col-auto">
+            <div class="d-flex align-items-center gap-2 flex-wrap">
+              <div class="search-wrap">
+                <i class="bi bi-search"></i>
+                <input class="k-search" type="text" placeholder="Search products…" id="searchInput"
+                  oninput="filterProducts()">
+              </div>
+              <select class="k-select" id="sortSelect" onchange="filterProducts()">
+                <option value="default">Sort: Default</option>
+                <option value="low">Price: Low → High</option>
+                <option value="high">Price: High → Low</option>
+                <option value="rating">Top Rated</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter Chips -->
+        <div class="filter-bar mb-4" id="filterBar">
+          <button class="filter-chip active" onclick="setFilter('all', this)">All</button>
+          <button class="filter-chip" onclick="setFilter('personal-care', this)">🧴 Personal Care</button>
+          <button class="filter-chip" onclick="setFilter('home', this)">🏡 Home & Living</button>
+          <button class="filter-chip" onclick="setFilter('food', this)">🌾 Food & Wellness</button>
+          <button class="filter-chip" onclick="setFilter('fashion', this)">👗 Sustainable Fashion</button>
+          <button class="filter-chip" onclick="setFilter('stationery', this)">✏️ Stationery</button>
+          <button class="filter-chip" onclick="setFilter('plants', this)">🪴 Plants & Garden</button>
+        </div>
+
+        <!-- Product Grid -->
+        <div class="product-grid" id="productGrid"></div>
+
+        <div id="noResults" style="display:none; text-align:center; padding:3rem; color:var(--text-muted);">
+          <div style="font-size:3rem; margin-bottom:1rem;">🔍</div>
+          <p>No products found. Try a different search or filter.</p>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- How It Works -->
+    <section id="how" class="how-section">
+      <div class="container">
+        <div class="text-center mb-5">
+          <div class="section-label">Simple Process</div>
+          <h2 class="section-title">How Green Credits Work</h2>
+          <p class="section-sub" style="max-width:480px; margin:0 auto">Volunteer, earn, redeem. It's that simple —
+            every action makes a difference.</p>
+        </div>
+        <div class="row g-4">
+          <div class="col-lg-3 col-sm-6">
+            <div class="step-card reveal visible">
+              <div class="step-num">1</div>
+              <div class="step-icon">🙋</div>
+              <div class="step-title">Volunteer</div>
+              <div class="step-desc">Join events, plant trees, clean beaches — any green activity on Karuuna earns you
+                credits.</div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-sm-6">
+            <div class="step-card reveal visible" style="transition-delay:0.1s">
+              <div class="step-num">2</div>
+              <div class="step-icon">🪙</div>
+              <div class="step-title">Earn Green Credits</div>
+              <div class="step-desc">Every verified volunteer hour = 10 GC. Special events offer bonus multipliers up to
+                3x.</div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-sm-6">
+            <div class="step-card reveal visible" style="transition-delay:0.2s">
+              <div class="step-num">3</div>
+              <div class="step-icon">🛒</div>
+              <div class="step-title">Shop Here</div>
+              <div class="step-desc">Browse eco-certified products from verified sustainable brands and add them to your
+                cart.</div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-sm-6">
+            <div class="step-card reveal visible" style="transition-delay:0.3s">
+              <div class="step-num">4</div>
+              <div class="step-icon">📦</div>
+              <div class="step-title">Delivered Green</div>
+              <div class="step-desc">Orders are shipped in 100% plastic-free packaging. Track your order and impact in
+                one place.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer style="border-top:1px solid var(--border);padding:2rem 0;position:relative;z-index:1;">
+    <div class="container">
+      <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+        <div class="navbar-brand" style="font-size:1rem;font-family:var(--font);font-weight:800;">🌿 Karuuna Green Store
+        </div>
+        <div style="font-size:0.8rem;color:var(--text-muted)">1 GC = ₹2 · Minimum redemption: 50 GC · Credits valid for
+          12 months</div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    /* ── Product Data ── */
+    const products = [
+      { id: 1, name: 'Bamboo Toothbrush Set (4 Pack)', category: 'personal-care', img: 'https://m.media-amazon.com/images/I/71Q5yjJp5rL._AC_SL1500_.jpg', price: 60, oldPrice: 80, rating: 4.8, reviews: 312, tags: ['Biodegradable', 'Vegan'], badge: 'Best Seller' },
+      { id: 2, name: 'Organic Neem Face Wash', category: 'personal-care', img: 'https://www.vedobi.com/cdn/shop/files/Neem-Face-Wash_1200x1200.jpg', price: 45, oldPrice: null, rating: 4.6, reviews: 198, tags: ['Organic', 'Cruelty-Free'], badge: null },
+      { id: 3, name: 'Beeswax Food Wraps (Set of 3)', category: 'home', img: 'https://m.media-amazon.com/images/I/81Xs5OaVYQL._AC_SL1500_.jpg', price: 75, oldPrice: 100, rating: 4.9, reviews: 445, tags: ['Zero Waste', 'Reusable'], badge: 'Sale' },
+      { id: 4, name: 'Seed Paper Notebook A5', category: 'stationery', img: 'https://m.media-amazon.com/images/I/71v0qoKa4XL._AC_SL1500_.jpg', price: 50, oldPrice: null, rating: 4.7, reviews: 156, tags: ['Plantable', 'Recycled'], badge: 'New' },
+      { id: 5, name: 'Organic Moringa Powder 200g', category: 'food', img: 'https://m.media-amazon.com/images/I/71pLT3RINZL._AC_SL1500_.jpg', price: 90, oldPrice: 120, rating: 4.5, reviews: 289, tags: ['Organic', 'Superfood'], badge: null },
+      { id: 6, name: 'Hemp Tote Bag', category: 'fashion', img: 'https://hempnath.com/cdn/shop/files/IMG_1925_1200x.jpg', price: 65, oldPrice: null, rating: 4.8, reviews: 521, tags: ['Fair Trade', 'Vegan'], badge: 'Best Seller' },
+      { id: 7, name: 'Compost Starter Kit', category: 'plants', img: 'https://basilandblooms.com/cdn/shop/files/CompostStarterKit_1024x1024.jpg', price: 110, oldPrice: 150, rating: 4.6, reviews: 87, tags: ['Zero Waste', 'Organic'], badge: 'Sale' },
+      { id: 8, name: 'Solar Lantern Mini', category: 'home', img: 'https://m.media-amazon.com/images/I/71S2zc8LQTL._AC_SL1500_.jpg', price: 150, oldPrice: null, rating: 4.9, reviews: 203, tags: ['Solar', 'Plastic-Free'], badge: 'New' },
+      { id: 9, name: 'Loofah Bath Scrubber', category: 'personal-care', img: 'https://m.media-amazon.com/images/I/81dGAMFQ3RL._AC_SL1500_.jpg', price: 30, oldPrice: null, rating: 4.4, reviews: 142, tags: ['Biodegradable', 'Natural'], badge: null },
+      { id: 10, name: 'Terracotta Planter Set', category: 'plants', img: 'https://m.media-amazon.com/images/I/71CqRtqR4CL._AC_SL1500_.jpg', price: 85, oldPrice: 110, rating: 4.7, reviews: 334, tags: ['Handmade', 'Plastic-Free'], badge: null },
+      { id: 11, name: 'Organic Green Tea Loose Leaf', category: 'food', img: 'https://dtefoods.co.uk/cdn/shop/products/greentea_1kg.jpg', price: 55, oldPrice: null, rating: 4.8, reviews: 412, tags: ['Organic', 'Fair Trade'], badge: null },
+      { id: 12, name: 'Recycled Cotton Tee', category: 'fashion', img: 'https://rapanui.co.uk/cdn/shop/products/recycled-cotton-t-shirt-natural-1.jpg', price: 120, oldPrice: 160, rating: 4.6, reviews: 267, tags: ['Recycled', 'Fair Trade'], badge: 'Sale' },
+    ];
+
+    let cart = [];
+    let activeFilter = 'all';
+    let wishlist = new Set();
+
+    /* ── Render Products ── */
+    function renderProducts(list) {
+      const grid = document.getElementById('productGrid');
+      const noRes = document.getElementById('noResults');
+      if (list.length === 0) { grid.innerHTML = ''; noRes.style.display = 'block'; return; }
+      noRes.style.display = 'none';
+      grid.innerHTML = list.map(p => `
+        <div class="product-card" id="pcard-${p.id}">
+          <div class="product-img-wrap">
+            <img
+              src="${p.img}"
+              alt="${p.name}"
+              loading="lazy"
+              onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+            />
+            <div class="product-emoji" style="display:none">${p.emoji || '🌿'}</div>
+            ${p.badge ? `<div class="product-badge ${p.badge === 'Sale' ? 'sale' : p.badge === 'New' ? 'new' : ''}">${p.badge}</div>` : ''}
+            <button class="wishlist-btn ${wishlist.has(p.id) ? 'active' : ''}" onclick="toggleWishlist(${p.id},this)" title="Wishlist">
+              <i class="bi bi-heart${wishlist.has(p.id) ? '-fill' : ''}"></i>
+            </button>
+          </div>
+          <div class="product-body">
+            <div class="product-category">${p.category.replace(/-/g, ' ')}</div>
+            <div class="product-name">${p.name}</div>
+            <div class="product-meta">
+              <span class="product-rating">${'★'.repeat(Math.floor(p.rating))}${p.rating % 1 >= 0.5 ? '½' : ''}</span>
+              <span class="product-reviews">(${p.reviews})</span>
+            </div>
+            <div class="eco-tags">${p.tags.map(t => `<span class="eco-tag">${t}</span>`).join('')}</div>
+            <div class="product-price-row">
+              <div class="product-price">
+                <div class="price-credits"><i class="bi bi-patch-check-fill"></i>${p.price} GC</div>
+                ${p.oldPrice ? `<span class="price-old">${p.oldPrice} GC</span>` : ''}
+              </div>
+              <button class="add-btn" onclick="addToCart(${p.id})">
+                <i class="bi bi-plus-lg"></i>Add
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    /* ── Filter / Search / Sort ── */
+    function filterProducts() {
+      const q = document.getElementById('searchInput').value.toLowerCase();
+      const sort = document.getElementById('sortSelect').value;
+      let list = products.filter(p => {
+        const matchCat = activeFilter === 'all' || p.category === activeFilter;
+        const matchQ = p.name.toLowerCase().includes(q) || p.tags.some(t => t.toLowerCase().includes(q));
+        return matchCat && matchQ;
+      });
+      if (sort === 'low') list.sort((a, b) => a.price - b.price);
+      if (sort === 'high') list.sort((a, b) => b.price - a.price);
+      if (sort === 'rating') list.sort((a, b) => b.rating - a.rating);
+      renderProducts(list);
+    }
+
+    function setFilter(cat, el) {
+      activeFilter = cat;
+      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+      filterProducts();
+    }
+
+    /* ── Cart Logic ── */
+    function addToCart(id) {
+      const p = products.find(x => x.id === id);
+      const existing = cart.find(x => x.id === id);
+      if (existing) existing.qty++;
+      else cart.push({ ...p, qty: 1 });
+      updateCart();
+      showToast(`${p.emoji} ${p.name} added to cart!`);
+    }
+
+    function removeFromCart(id) {
+      cart = cart.filter(x => x.id !== id);
+      updateCart();
+    }
+
+    function changeQty(id, delta) {
+      const item = cart.find(x => x.id === id);
+      if (!item) return;
+      item.qty += delta;
+      if (item.qty <= 0) removeFromCart(id);
+      else updateCart();
+    }
+
+    function updateCart() {
+      const total = cart.reduce((s, x) => s + x.price * x.qty, 0);
+      const count = cart.reduce((s, x) => s + x.qty, 0);
+      document.getElementById('cartTotal').textContent = total;
+      const badge = document.getElementById('cartCountBadge');
+      if (count > 0) { badge.style.display = 'flex'; badge.textContent = count; }
+      else badge.style.display = 'none';
+
+      const itemsEl = document.getElementById('cartItems');
+      const footer = document.getElementById('cartFooter');
+
+      if (cart.length === 0) {
+        itemsEl.innerHTML = `<div class="cart-empty"><div class="cart-empty-icon">🌱</div><p>Your cart is empty.<br>Add some eco products!</p></div>`;
+        footer.style.display = 'none';
+      } else {
+        footer.style.display = 'block';
+        itemsEl.innerHTML = cart.map(item => `
+          <div class="cart-item">
+            <div class="cart-item-emoji">${item.emoji}</div>
+            <div class="cart-item-info">
+              <div class="cart-item-name">${item.name}</div>
+              <div class="cart-item-price"><i class="bi bi-patch-check-fill"></i> ${item.price * item.qty} GC</div>
+            </div>
+            <div class="cart-qty">
+              <button class="qty-btn" onclick="changeQty(${item.id},-1)"><i class="bi bi-dash"></i></button>
+              <span class="qty-num">${item.qty}</span>
+              <button class="qty-btn" onclick="changeQty(${item.id},1)"><i class="bi bi-plus"></i></button>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    function openCart() {
+      document.getElementById('cartDrawer').classList.add('open');
+      document.getElementById('cartOverlay').classList.add('open');
+    }
+    function closeCart() {
+      document.getElementById('cartDrawer').classList.remove('open');
+      document.getElementById('cartOverlay').classList.remove('open');
+    }
+
+    function checkout() {
+      const total = cart.reduce((s, x) => s + x.price * x.qty, 0);
+      if (total > 840) { showToast('❌ Not enough Green Credits!', true); return; }
+      cart = [];
+      updateCart();
+      closeCart();
+      showToast('🎉 Order placed! Delivering in eco-friendly packaging.');
+    }
+
+    /* ── Wishlist ── */
+    function toggleWishlist(id, btn) {
+      if (wishlist.has(id)) {
+        wishlist.delete(id);
+        btn.classList.remove('active');
+        btn.innerHTML = '<i class="bi bi-heart"></i>';
+        showToast('Removed from wishlist');
+      } else {
+        wishlist.add(id);
+        btn.classList.add('active');
+        btn.innerHTML = '<i class="bi bi-heart-fill"></i>';
+        showToast('💚 Added to wishlist!');
+      }
+    }
+
+    /* ── Toast ── */
+    function showToast(msg, err = false) {
+      const c = document.getElementById('toastContainer');
+      const t = document.createElement('div');
+      t.className = 'k-toast';
+      if (err) t.style.borderColor = 'rgba(239,68,68,0.4)';
+      t.innerHTML = `<i class="bi ${err ? 'bi-x-circle' : 'bi-check-circle-fill'}" style="color:${err ? 'var(--danger)' : 'var(--accent)'}"></i><span>${msg}</span>`;
+      c.appendChild(t);
+      setTimeout(() => t.remove(), 3000);
+    }
+
+    /* ── Theme Toggle ── */
+    function toggleTheme() {
+      const html = document.documentElement;
+      const isDark = html.getAttribute('data-theme') === 'dark';
+      html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      document.getElementById('themeIcon').className = isDark ? 'bi bi-sun-fill' : 'bi bi-moon-stars-fill';
+    }
+
+    /* ── Init ── */
+    renderProducts(products);
+  </script>
+</body>
+
+</html>

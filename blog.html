@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog & Achievements — Karuuna </title>
+  <link rel="icon" href="{% static 'image/weblogo.png' %}">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <link rel="stylesheet" href="{% static 'karuuna.css' %}" />
+
+  <style>
+    /* ── Review Form Styles ── */
+    .rv-star {
+      font-size: 1.9rem;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: color 0.12s, transform 0.1s;
+      display: inline-block;
+      line-height: 1;
+      user-select: none;
+    }
+
+    .rv-star:hover,
+    .rv-star.active {
+      color: #edc042;
+      transform: scale(1.15);
+    }
+
+    .rv-input {
+      background: var(--card-bg) !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      color: var(--text) !important;
+      border-radius: 10px !important;
+      padding: 0.65rem 1rem !important;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.92rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .rv-input:focus {
+      border-color: var(--accent) !important;
+      box-shadow: 0 0 0 3px rgba(168, 197, 126, 0.12) !important;
+      outline: none;
+    }
+
+    .rv-input::placeholder {
+      color: var(--text-muted);
+      opacity: 0.6;
+    }
+
+    textarea.rv-input {
+      resize: vertical;
+      min-height: 110px;
+      line-height: 1.65;
+    }
+
+    .rv-review-item {
+      display: flex;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .rv-review-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .rv-review-stars {
+      color: #edc042;
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+      margin: 2px 0 5px;
+    }
+
+    [data-theme="light"] .rv-input {
+      background: #f8f9fa !important;
+      border-color: rgba(0, 0, 0, 0.12) !important;
+      color: #1a1a1a !important;
+    }
+
+    [data-theme="light"] .rv-input:focus {
+      border-color: var(--accent) !important;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="page-transition"></div>
+
+  <!-- NAVBAR -->
+  <nav id="mainNav" class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href='/index/'><img src="{% static 'image/weblogo.png' %}" alt="logo" width="30">Karuuna
+      </a>
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu"
+        style="color:var(--accent)">
+        <i class="bi bi-list fs-4"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav ms-auto gap-2 align-items-lg-center">
+          <li class="nav-item"><a class="nav-link" href='/events/' data-nav-page='/events/'>Events</a></li>
+        </ul>
+        <div class="d-flex align-items-center gap-3 ms-lg-4 mt-3 mt-lg-0">
+          <a href='/index/' class="nav-link" style="font-weight:600;color:var(--text-muted)">Home</a>
+          
+          
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div class="blob blob-1" style="opacity:0.12;top:-200px;left:-200px"></div>
+    <div class="container position-relative">
+      <div class="text-center reveal visible">
+        <div class="section-chip">Stories & Spotlights</div>
+        <h1 class="page-header-title" style="max-width:600px;margin:0 auto">
+          Impact, <span style="color:var(--accent)">Inspiration</span> & Achievements
+        </h1>
+        <p class="page-header-sub mx-auto">Real stories from our volunteer community, event highlights, and eco-hero
+          spotlights from across India.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- ══ MONTHLY HIGHLIGHTS ══ -->
+  <section style="padding:4rem 0">
+    <div class="container">
+      <div class="text-center mb-5 reveal visible">
+        <div class="section-chip">🏆 This Month</div>
+        <h2 class="section-title">March Spotlights</h2>
+      </div>
+
+      <div class="row g-4 mb-5">
+
+        <!-- Volunteer of the Month -->
+        <div class="col-md-6 col-lg-4 reveal visible">
+          <div class="k-card text-center"
+            style="border:1px solid rgba(255,215,0,0.25);background:linear-gradient(160deg,var(--card-bg),rgba(255,215,0,0.03))">
+            <div
+              style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#edc042;margin-bottom:1rem">
+              🥇 Volunteer of the Month</div>
+            <div class="k-avatar xl mx-auto mb-3" style="background:linear-gradient(135deg,#4a3900,#b8860b)">PR</div>
+            <div style="font-weight:900;font-size:1.2rem">Priya Reddy</div>
+            <div style="color:var(--text-muted);font-size:0.85rem">Delhi, DL</div>
+            <div class="d-flex justify-content-center gap-2 mt-2 mb-3 flex-wrap">
+              <span class="k-badge"
+                style="background:rgba(255,215,0,0.1);color:#edc042;border-color:rgba(255,215,0,0.25)">🌳
+                Guardian</span>
+            </div>
+            <div class="row g-2 text-center mb-3">
+              <div class="col-4">
+                <div style="font-weight:900;color:var(--accent);font-size:1.2rem">14</div>
+                <div style="color:var(--text-muted);font-size:0.75rem">Events</div>
+              </div>
+              <div class="col-4">
+                <div style="font-weight:900;color:var(--accent);font-size:1.2rem">42h</div>
+                <div style="color:var(--text-muted);font-size:0.75rem">Hours</div>
+              </div>
+              <div class="col-4">
+                <div style="font-weight:900;color:var(--accent);font-size:1.2rem">1,420</div>
+                <div style="color:var(--text-muted);font-size:0.75rem">Credits</div>
+              </div>
+            </div>
+            <p style="color:var(--text-muted);font-size:0.88rem;line-height:1.6">"Every tree I plant is a promise to the
+              next generation. Karuuna made it easy to act on that promise every weekend."</p>
+          </div>
+        </div>
+
+        <!-- Best NGO -->
+        <div class="col-md-6 col-lg-4 reveal visible d-100">
+          <div class="k-card text-center"
+            style="border:1px solid rgba(168,197,126,0.3);background:linear-gradient(160deg,var(--card-bg),rgba(168,197,126,0.03))">
+            <div
+              style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);margin-bottom:1rem">
+              🏢 Best NGO of the Month</div>
+            <div class="k-avatar xl mx-auto mb-3"
+              style="background:linear-gradient(135deg,#1c4a1c,#3a8c2e);font-size:2.5rem">🌊</div>
+            <div style="font-weight:900;font-size:1.2rem">Ocean Warriors India</div>
+            <div style="color:var(--text-muted);font-size:0.85rem">Mumbai, MH</div>
+            <div class="d-flex justify-content-center gap-2 mt-2 mb-3 flex-wrap">
+              <span class="k-badge success">✓ Verified</span>
+              <span class="k-badge">Since 2019</span>
+            </div>
+            <div class="row g-2 text-center mb-3">
+              <div class="col-4">
+                <div style="font-weight:900;color:var(--accent);font-size:1.2rem">8</div>
+                <div style="color:var(--text-muted);font-size:0.75rem">Events</div>
+              </div>
+              <div class="col-4">
+                <div style="font-weight:900;color:var(--accent);font-size:1.2rem">320</div>
+                <div style="color:var(--text-muted);font-size:0.75rem">Volunteers</div>
+              </div>
+              <div class="col-4">
+                <div style="font-weight:900;color:var(--accent);font-size:1.2rem">4.9⭐</div>
+                <div style="color:var(--text-muted);font-size:0.75rem">Rating</div>
+              </div>
+            </div>
+            <p style="color:var(--text-muted);font-size:0.88rem;line-height:1.6">Removed 12 tonnes of plastic waste from
+              Mumbai coastlines in April alone through community-driven cleanup drives.</p>
+          </div>
+        </div>
+
+        <!-- Top Event -->
+        <div class="col-md-6 col-lg-4 reveal visible d-200">
+          <div class="k-card text-center"
+            style="border:1px solid rgba(66,153,225,0.25);background:linear-gradient(160deg,var(--card-bg),rgba(66,153,225,0.03))">
+            <div
+              style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#4299e1;margin-bottom:1rem">
+              🌟 Event Highlight</div>
+            <div style="font-size:3.5rem;margin-bottom:0.8rem">🌲</div>
+            <div style="font-weight:900;font-size:1.15rem;line-height:1.25">Aaravali Forest Restoration Drive</div>
+            <div style="color:var(--text-muted);font-size:0.85rem;margin:0.3rem 0 0.8rem">Green Earth Foundation ·
+              Gurugram</div>
+            <div class="row g-2 text-center mb-3">
+              <div class="col-4">
+                <div style="font-weight:900;color:var(--accent);font-size:1.2rem">50</div>
+                <div style="color:var(--text-muted);font-size:0.75rem">Volunteers</div>
+              </div>
+              <div class="col-4">
+                <div style="font-weight:900;color:var(--accent);font-size:1.2rem">800</div>
+                <div style="color:var(--text-muted);font-size:0.75rem">Trees</div>
+              </div>
+              <div class="col-4">
+                <div style="font-weight:900;color:var(--accent);font-size:1.2rem">4,000</div>
+                <div style="color:var(--text-muted);font-size:0.75rem">Credits</div>
+              </div>
+            </div>
+            <p style="color:var(--text-muted);font-size:0.88rem;line-height:1.6">800 saplings were planted across 3
+              hectares of degraded hillside land in a single morning event.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Leaderboard -->
+      <div class="row g-4">
+        <div class="col-lg-6 reveal visible d-300">
+          <div class="k-card">
+            <h6 style="font-weight:800;margin-bottom:1.2rem">🏆 Volunteer Leaderboard — April</h6>
+            <div class="d-flex flex-column gap-2">
+              <div class="leaderboard-item gold">
+                <div class="leaderboard-rank">🥇</div>
+                <div class="k-avatar" style="background:linear-gradient(135deg,#4a3900,#b8860b)">PR</div>
+                <div class="flex-grow-1">
+                  <div style="font-weight:700">Priya Reddy</div>
+                  <div style="color:var(--text-muted);font-size:0.8rem">Delhi · 14 events</div>
+                </div>
+                <div style="font-weight:900;color:var(--accent)">1,420 🪙</div>
+              </div>
+              <div class="leaderboard-item silver">
+                <div class="leaderboard-rank">🥈</div>
+                <div class="k-avatar" style="background:linear-gradient(135deg,#1c2f3a,#2c5a4e)">SM</div>
+                <div class="flex-grow-1">
+                  <div style="font-weight:700">Sneha Mehta</div>
+                  <div style="color:var(--text-muted);font-size:0.8rem">Noida · 11 events</div>
+                </div>
+                <div style="font-weight:900;color:var(--accent)">1,100 🪙</div>
+              </div>
+              <div class="leaderboard-item bronze">
+                <div class="leaderboard-rank">🥉</div>
+                <div class="k-avatar">AS</div>
+                <div class="flex-grow-1">
+                  <div style="font-weight:700">Arjun Sharma</div>
+                  <div style="color:var(--text-muted);font-size:0.8rem">Gurugram · 8 events</div>
+                </div>
+                <div style="font-weight:900;color:var(--accent)">1,240 🪙</div>
+              </div>
+              <div class="leaderboard-item">
+                <div class="leaderboard-rank" style="color:var(--text-muted)">4</div>
+                <div class="k-avatar" style="background:linear-gradient(135deg,#3a2e1a,#6b5520)">VK</div>
+                <div class="flex-grow-1">
+                  <div style="font-weight:700">Vikram Khanna</div>
+                  <div style="color:var(--text-muted);font-size:0.8rem">Mumbai · 7 events</div>
+                </div>
+                <div style="font-weight:900;color:var(--text-muted)">700 🪙</div>
+              </div>
+              <div class="leaderboard-item">
+                <div class="leaderboard-rank" style="color:var(--text-muted)">5</div>
+                <div class="k-avatar" style="background:linear-gradient(135deg,#1e3a1e,#3a6b2e)">AN</div>
+                <div class="flex-grow-1">
+                  <div style="font-weight:700">Ananya Nair</div>
+                  <div style="color:var(--text-muted);font-size:0.8rem">Bengaluru · 6 events</div>
+                </div>
+                <div style="font-weight:900;color:var(--text-muted)">600 🪙</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6 reveal visible d-400">
+          <div class="k-card">
+            <h6 style="font-weight:800;margin-bottom:1.2rem">🏢 NGO Leaderboard — April</h6>
+            <div class="d-flex flex-column gap-2">
+              <div class="leaderboard-item gold">
+                <div class="leaderboard-rank">🥇</div>
+                <div class="k-avatar" style="font-size:1.2rem;background:linear-gradient(135deg,#1c2f3a,#2c5a4e)">🌊
+                </div>
+                <div class="flex-grow-1">
+                  <div style="font-weight:700">Ocean Warriors India</div>
+                  <div style="color:var(--text-muted);font-size:0.8rem">Mumbai · 8 events</div>
+                </div>
+                <div style="font-weight:900;color:var(--accent)">320 vol.</div>
+              </div>
+              <div class="leaderboard-item silver">
+                <div class="leaderboard-rank">🥈</div>
+                <div class="k-avatar" style="font-size:1.2rem;background:linear-gradient(135deg,#1c4a1c,#3a8c2e)">🌳
+                </div>
+                <div class="flex-grow-1">
+                  <div style="font-weight:700">Green Earth Foundation</div>
+                  <div style="color:var(--text-muted);font-size:0.8rem">Gurugram · 6 events</div>
+                </div>
+                <div style="font-weight:900;color:var(--accent)">248 vol.</div>
+              </div>
+              <div class="leaderboard-item bronze">
+                <div class="leaderboard-rank">🥉</div>
+                <div class="k-avatar" style="font-size:1.2rem;background:linear-gradient(135deg,#3a2e1a,#6b5520)">📚
+                </div>
+                <div class="flex-grow-1">
+                  <div style="font-weight:700">Prakriti Shiksha Sangh</div>
+                  <div style="color:var(--text-muted);font-size:0.8rem">Jaipur · 4 events</div>
+                </div>
+                <div style="font-weight:900;color:var(--accent)">200 vol.</div>
+              </div>
+              <div class="leaderboard-item">
+                <div class="leaderboard-rank" style="color:var(--text-muted)">4</div>
+                <div class="k-avatar" style="font-size:1.2rem;background:linear-gradient(135deg,#2a1a3a,#4e2c6b)">🏞️
+                </div>
+                <div class="flex-grow-1">
+                  <div style="font-weight:700">Yamuna Mitra Samiti</div>
+                  <div style="color:var(--text-muted);font-size:0.8rem">Delhi · 3 events</div>
+                </div>
+                <div style="font-weight:900;color:var(--text-muted)">155 vol.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- BLOG ARTICLES -->
+  <section style="padding:4rem 0 5rem">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center mb-5 reveal visible">
+        <div>
+          <div class="section-chip">📰 Latest Stories</div>
+          <h2 class="section-title mt-1">From the Community</h2>
+        </div>
+        <div class="d-flex gap-2 flex-wrap">
+          <button class="k-badge" onclick="filterBlog('')" style="cursor:pointer;padding:0.5rem 1rem">All</button>
+          <button class="k-badge" onclick="filterBlog('Impact')"
+            style="cursor:pointer;padding:0.5rem 1rem">Impact</button>
+          <button class="k-badge" onclick="filterBlog('Guide')"
+            style="cursor:pointer;padding:0.5rem 1rem">Guides</button>
+          <button class="k-badge" onclick="filterBlog('Story')"
+            style="cursor:pointer;padding:0.5rem 1rem">Stories</button>
+        </div>
+      </div>
+
+      <div class="row g-4" id="blogGrid">
+
+        <div class="col-md-6 col-lg-4 reveal visible blog-item" data-cat="Impact">
+          <div class="blog-card">
+            <div class="blog-thumb e1">🌲</div>
+            <div class="blog-body">
+              <div class="blog-category">Impact</div>
+              <div class="blog-title">How Volunteers Restored 200 Acres of Aaravali Forest in 2024</div>
+              <div class="blog-excerpt">A look at the collective effort of 2,000+ volunteers who reversed decades of
+                deforestation in the Haryana hills.</div>
+              <div class="blog-meta">
+                <div class="k-avatar" style="width:26px;height:26px;font-size:0.65rem">GE</div>
+                <span>Green Earth Foundation</span>
+                <span>·</span>
+                <span>8 min read</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4 reveal visible d-100 blog-item" data-cat="Story">
+          <div class="blog-card">
+            <div class="blog-thumb e2">🌊</div>
+            <div class="blog-body">
+              <div class="blog-category">Story</div>
+              <div class="blog-title">From a Weekend Volunteer to India's Top Green Credit Earner</div>
+              <div class="blog-excerpt">Priya Reddy shares how a single beach cleanup changed her weekends — and her
+                worldview — forever.</div>
+              <div class="blog-meta">
+                <div class="k-avatar"
+                  style="width:26px;height:26px;font-size:0.65rem;background:linear-gradient(135deg,#4a3900,#b8860b)">PR
+                </div>
+                <span>Priya Reddy</span>
+                <span>·</span>
+                <span>5 min read</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4 reveal visible d-200 blog-item" data-cat="Guide">
+          <div class="blog-card">
+            <div class="blog-thumb e3">📋</div>
+            <div class="blog-body">
+              <div class="blog-category">Guide</div>
+              <div class="blog-title">How to Organize a Zero-Waste Community Cleanup: A Step-by-Step Guide</div>
+              <div class="blog-excerpt">Everything an NGO needs to know — from logistics and permits to volunteer
+                briefing and waste segregation.</div>
+              <div class="blog-meta">
+                <div class="k-avatar"
+                  style="width:26px;height:26px;font-size:0.65rem;background:linear-gradient(135deg,#1c4a1c,#3a8c2e)">KA
+                </div>
+                <span>Karuuna Admin</span>
+                <span>·</span>
+                <span>12 min read</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4 reveal blog-item" data-cat="Impact">
+          <div class="blog-card">
+            <div class="blog-thumb e4">🌍</div>
+            <div class="blog-body">
+              <div class="blog-category">Impact</div>
+              <div class="blog-title">Green Credits: Can Gamification Save the Planet?</div>
+              <div class="blog-excerpt">We explore the psychology behind Karuuna's rewards system and how it drives
+                sustained volunteer behavior change.</div>
+              <div class="blog-meta">
+                <div class="k-avatar"
+                  style="width:26px;height:26px;font-size:0.65rem;background:linear-gradient(135deg,#1c4a1c,#3a8c2e)">KA
+                </div>
+                <span>Karuuna Team</span>
+                <span>·</span>
+                <span>7 min read</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4 reveal d-100 blog-item" data-cat="Story">
+          <div class="blog-card">
+            <div class="blog-thumb e5">🦋</div>
+            <div class="blog-body">
+              <div class="blog-category">Story</div>
+              <div class="blog-title">The School Garden That Became a Pollinator Sanctuary</div>
+              <div class="blog-excerpt">A primary school in Chennai transformed its concrete yard into a thriving
+                butterfly garden — with 30 young volunteers.</div>
+              <div class="blog-meta">
+                <div class="k-avatar"
+                  style="width:26px;height:26px;font-size:0.65rem;background:linear-gradient(135deg,#3a2e1a,#6b5520)">CB
+                </div>
+                <span>Chennai Biodiversity</span>
+                <span>·</span>
+                <span>4 min read</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4 reveal d-200 blog-item" data-cat="Guide">
+          <div class="blog-card">
+            <div class="blog-thumb e6">💡</div>
+            <div class="blog-body">
+              <div class="blog-category">Guide</div>
+              <div class="blog-title">Maximizing Your Green Credits: Tips From Top Volunteers</div>
+              <div class="blog-excerpt">India's most active Karuuna volunteers share their strategies for finding
+                events, staying consistent, and leveling up fast.</div>
+              <div class="blog-meta">
+                <div class="k-avatar" style="width:26px;height:26px;font-size:0.65rem">AS</div>
+                <span>Arjun Sharma</span>
+                <span>·</span>
+                <span>6 min read</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ══ REVIEW FORM SECTION ══ -->
+  <section style="padding:4rem 0 5rem">
+    <div class="container">
+
+      <div class="text-center mb-5 reveal visible">
+        <div class="section-chip">💬 Community Reviews</div>
+        <h2 class="section-title">Share Your Experience</h2>
+        <p class="page-header-sub mx-auto" style="max-width:520px">Loved volunteering with Karuuna? Tell others about
+          your journey and inspire the next generation of eco-heroes.</p>
+      </div>
+
+      <div class="row g-4 align-items-start justify-content-center">
+
+        <!-- FORM CARD -->
+        <div class="col-lg-6 reveal visible">
+          <div class="k-card" style="border:1px solid rgba(168,197,126,0.2);">
+            <div
+              style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);margin-bottom:1.2rem">
+              ✍️ Write a Review</div>
+
+            <!-- Star Rating -->
+            <form id="contactForm" method="POST" action='/blog/'>
+              {% csrf_token %}
+              <div class="row g-3 mt-1">
+                <div class="col-md-6">
+                  <label
+                    style="display:block;font-size:0.82rem;font-weight:700;color:var(--text-muted);margin-bottom:0.4rem;text-transform:uppercase;letter-spacing:0.05em">Full_Name
+                    <span style="color:var(--accent)">*</span></label>
+                  <input type="text" id="rv-name" name="Full_Name" class="rv-input form-control" placeholder="e.g. Arjun Sharma">
+                </div>
+                <div class="col-md-6">
+                  <label
+                    style="display:block;font-size:0.82rem;font-weight:700;color:var(--text-muted);margin-bottom:0.4rem;text-transform:uppercase;letter-spacing:0.05em">Email
+                    <span style="color:var(--accent)">*</span></label>
+                  <input type="email" id="rv-email" name="Email" class="rv-input form-control" placeholder="you@example.com">
+                </div>
+                <div class="col-12">
+                  <label
+                    style="display:block;font-size:0.82rem;font-weight:700;color:var(--text-muted);margin-bottom:0.4rem;text-transform:uppercase;letter-spacing:0.05em">Your_Role</label>
+                  <input type="text" id="rv-role" name="Your_Role" class="rv-input form-control"
+                    placeholder="e.g. Volunteer, NGO Partner, Organiser">
+                </div>
+                <div class="col-12">
+                  <label
+                    style="display:block;font-size:0.82rem;font-weight:700;color:var(--text-muted);margin-bottom:0.4rem;text-transform:uppercase;letter-spacing:0.05em">Your_Review
+                    <span style="color:var(--accent)">*</span></label>
+                  <textarea id="rv-review" name="Your_Review" class="rv-input form-control"
+                    placeholder="Tell us about your experience — an event you joined, the impact you saw, or a moment that moved you..."></textarea>
+                </div>
+              </div>
+
+              <div id="rv-error"
+                style="display:none;color:#fc8181;font-size:0.83rem;margin-top:0.75rem;padding:0.5rem 0.75rem;background:rgba(252,129,129,0.08);border-radius:8px;border-left:3px solid #fc8181">
+              </div>
+
+              <button class="btn-primary-k ripple-btn w-100 mt-3" id="rv-btn" onclick="submitReview()"
+                style="padding:0.75rem;font-size:0.95rem;text-align:center">
+                <i class="bi bi-send me-2"></i>Submit Review
+              </button>
+          </div>
+        </div>
+
+        <!-- REVIEWS LIST CARD -->
+        <div class="col-lg-6 reveal visible d-100">
+          <div class="k-card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem">
+              <div
+                style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent)">
+                🌟 Recent Reviews</div>
+              <div id="rv-count-badge" class="k-badge success">2 reviews</div>
+            </div>
+
+            <div id="rv-list" class="d-flex flex-column">
+
+              <!-- Seeded review 1 -->
+              <div class="rv-review-item">
+                <div class="k-avatar" style="background:linear-gradient(135deg,#4a3900,#b8860b);flex-shrink:0">PR</div>
+                <div class="flex-grow-1">
+                  <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:4px">
+                    <div>
+                      <span style="font-weight:700;font-size:0.95rem">Priya Reddy</span>
+                      <span
+                        style="margin-left:8px;font-size:0.78rem;color:var(--text-muted);background:rgba(168,197,126,0.1);padding:2px 8px;border-radius:20px">Volunteer</span>
+                    </div>
+                    <div class="rv-review-stars">★★★★★</div>
+                  </div>
+                  <div style="color:var(--text-muted);font-size:0.78rem;margin:3px 0 6px">April 2, 2025 · Delhi</div>
+                  <p style="color:var(--text-muted);font-size:0.88rem;line-height:1.65;margin:0">Every weekend with
+                    Karuuna has been meaningful. The events are well-organised and you genuinely feel the impact.
+                    Planted 80+ trees in March alone!</p>
+                </div>
+              </div>
+
+              <!-- Seeded review 2 -->
+              <div class="rv-review-item">
+                <div class="k-avatar" style="background:linear-gradient(135deg,#1c2f3a,#2c5a4e);flex-shrink:0">SM</div>
+                <div class="flex-grow-1">
+                  <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:4px">
+                    <div>
+                      <span style="font-weight:700;font-size:0.95rem">Sneha Mehta</span>
+                      <span
+                        style="margin-left:8px;font-size:0.78rem;color:var(--text-muted);background:rgba(168,197,126,0.1);padding:2px 8px;border-radius:20px">Volunteer</span>
+                    </div>
+                    <div class="rv-review-stars">★★★★★</div>
+                  </div>
+                  <div style="color:var(--text-muted);font-size:0.78rem;margin:3px 0 6px">March 28, 2025 · Noida</div>
+                  <p style="color:var(--text-muted);font-size:0.88rem;line-height:1.65;margin:0">The green credits
+                    system keeps me motivated — like a fitness app but for the planet. Highly addictive in the best
+                    way!</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="cta-banner" style="padding:5rem 0">
+    <div class="container text-center position-relative">
+      <div class="section-chip">Your Story Next?</div>
+      <h2 class="cta-title mt-2">Start Writing Your<br>Green Story Today</h2>
+      <p class="cta-sub mt-3 mb-5">Join 52,000+ volunteers across India creating impact, earning credits, and making
+        history.</p>
+      <div class="d-flex justify-content-center flex-wrap gap-3">
+        <a href="/signup/" class="btn-primary-k ripple-btn"
+          style="padding:0.9rem 2.2rem;font-size:1.05rem;text-decoration:none">
+          <i class="bi bi-rocket-takeoff me-2"></i>Join Free Today
+        </a>
+        <a href="/events/" class="btn-outline-k ripple-btn"
+          style="padding:0.9rem 2.2rem;font-size:1.05rem;text-decoration:none">
+          <i class="bi bi-compass me-2"></i>Browse Events
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="row gy-4">
+        <div class="col-lg-4">
+          <div class="footer-brand"><img src="{% static 'image/weblogo.png' %}" alt="logo" width="30">Karuuna</div>
+          <div class="footer-tagline">"#Small change, big impact"</div>
+          <p class="mt-3" style="color:var(--text-muted);font-size:0.88rem;max-width:280px;line-height:1.65">Connecting
+            passionate individuals with NGOs to create grassroots environmental change across India.</p>
+          <div class="d-flex gap-2 mt-3">
+            <a href="#" class="social-icon"><i class="bi bi-twitter-x"></i></a>
+            <a href="#" class="social-icon"><i class="bi bi-instagram"></i></a>
+            <a href="#" class="social-icon"><i class="bi bi-linkedin"></i></a>
+          </div>
+        </div>
+
+        <div class="col-6 col-lg-2">
+          <div class="footer-heading">Company</div><a href='/blog/' class="footer-link">Blog</a><a href="#"
+            class="footer-link">About Us</a><a href="#" class="footer-link">Careers</a>
+        </div>
+        <div class="col-6 col-lg-2">
+          <div class="footer-heading">Support</div><a href='/contact/' class="footer-link">Help Center</a><a href="#"
+            class="footer-link">Contact</a><a href='/privacy/' class="footer-link">Privacy Policy</a>
+        </div>
+
+      </div>
+      <hr class="footer-divider" />
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 footer-bottom">
+        <span>© 2025 Karuuna. All rights reserved.</span>
+        <span>Made with 💚 for a greener Bharat</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="{% static 'karuuna.js' %}"></script>
+
+  <script>
+    /* ── Blog Filter ── */
+    function filterBlog(cat) {
+      document.querySelectorAll('.blog-item').forEach(item => {
+        item.style.display = !cat || item.getAttribute('data-cat') === cat ? '' : 'none';
+      });
+    }
+
+    /* ── Review Form ── */
+    const ratingLabels = ['', 'Poor', 'Fair', 'Good', 'Great', 'Excellent'];
+    let rvRating = 0;
+    let rvCount = 2;
+
+    const stars = document.querySelectorAll('.rv-star');
+
+    stars.forEach(star => {
+      star.addEventListener('mouseover', () => previewStars(+star.dataset.v));
+      star.addEventListener('mouseout', () => previewStars(rvRating));
+      star.addEventListener('click', () => {
+        rvRating = +star.dataset.v;
+        previewStars(rvRating);
+        document.getElementById('rv-rating-label').textContent = ratingLabels[rvRating];
+      });
+    });
+
+    function previewStars(n) {
+      stars.forEach((s, i) => {
+        s.textContent = i < n ? '★' : '☆';
+        s.classList.toggle('active', i < n);
+      });
+    }
+
+    function getInitials(name) {
+      return name.trim().split(' ').filter(Boolean).map(w => w[0]).join('').slice(0, 2).toUpperCase() || '?';
+    }
+
+    function escapeHtml(str) {
+      const d = document.createElement('div');
+      d.textContent = str;
+      return d.innerHTML;
+    }
+
+    function showError(msg) {
+      const el = document.getElementById('rv-error');
+      el.textContent = msg;
+      el.style.display = 'block';
+      setTimeout(() => el.style.display = 'none', 3500);
+    }
+
+    function submitReview() {
+      const name = document.getElementById('rv-name').value.trim();
+      const email = document.getElementById('rv-email').value.trim();
+      const role = document.getElementById('rv-role').value.trim();
+      const review = document.getElementById('rv-review').value.trim();
+      const btn = document.getElementById('rv-btn');
+
+      if (!name) return showError('Please enter your full name.');
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showError('Please enter a valid email address.');
+      if (!rvRating) return showError('Please select a star rating before submitting.');
+      if (!review) return showError('Please write your review before submitting.');
+
+      const starsStr = '★'.repeat(rvRating) + '☆'.repeat(5 - rvRating);
+      const initials = getInitials(name);
+      const roleLabel = role || 'Volunteer';
+      const today = new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+
+      const avatarColors = [
+        'linear-gradient(135deg,#1c4a1c,#3a8c2e)',
+        'linear-gradient(135deg,#3a2e1a,#6b5520)',
+        'linear-gradient(135deg,#1c2f3a,#2c5a4e)',
+        'linear-gradient(135deg,#2a1a3a,#4e2c6b)',
+        'linear-gradient(135deg,#1e3a3a,#2e6b6b)',
+      ];
+      const bg = avatarColors[rvCount % avatarColors.length];
+
+      const item = document.createElement('div');
+      item.className = 'rv-review-item';
+      item.style.opacity = '0';
+      item.style.transform = 'translateY(-10px)';
+      item.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+      item.innerHTML = `
+        <div class="k-avatar" style="background:${bg};flex-shrink:0">${escapeHtml(initials)}</div>
+        <div class="flex-grow-1">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:4px">
+            <div>
+              <span style="font-weight:700;font-size:0.95rem">${escapeHtml(name)}</span>
+              <span style="margin-left:8px;font-size:0.78rem;color:var(--text-muted);background:rgba(168,197,126,0.1);padding:2px 8px;border-radius:20px">${escapeHtml(roleLabel)}</span>
+            </div>
+            <div class="rv-review-stars">${starsStr}</div>
+          </div>
+          <div style="color:var(--text-muted);font-size:0.78rem;margin:3px 0 6px">${today}</div>
+          <p style="color:var(--text-muted);font-size:0.88rem;line-height:1.65;margin:0">${escapeHtml(review)}</p>
+        </div>`;
+
+      const list = document.getElementById('rv-list');
+      list.insertBefore(item, list.firstChild);
+      requestAnimationFrame(() => {
+        item.style.opacity = '1';
+        item.style.transform = 'translateY(0)';
+      });
+
+      rvCount++;
+      document.getElementById('rv-count-badge').textContent = rvCount + ' reviews';
+
+      document.getElementById('rv-name').value = '';
+      document.getElementById('rv-email').value = '';
+      document.getElementById('rv-role').value = '';
+      document.getElementById('rv-review').value = '';
+      rvRating = 0;
+      previewStars(0);
+      document.getElementById('rv-rating-label').textContent = '';
+
+      const origHTML = btn.innerHTML;
+      btn.innerHTML = '<i class="bi bi-check-circle me-2"></i>Review Submitted!';
+      btn.style.opacity = '0.75';
+      setTimeout(() => { btn.innerHTML = origHTML; btn.style.opacity = ''; }, 3000);
+    }
+  </script>
+
+</body>
+
+</html>

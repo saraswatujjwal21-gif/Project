@@ -1,0 +1,1334 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Karuuna</title>
+  <link rel="icon" href="{% static 'image/weblogo.png' %}">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/bootstrap-icons.min.css' %}" />
+  <link rel="stylesheet" href="{% static 'karuuna.css' %}" />
+  <style>
+    /* ═══════════════════════════════════════════
+       CSS VARIABLES — DARK & LIGHT THEMES
+    ═══════════════════════════════════════════ */
+    :root,
+    [data-theme="dark"] {
+      --bg: #0d1610;
+      --bg2: #111a14;
+      --card-bg: rgba(255, 255, 255, 0.04);
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #e8ede6;
+      --text-muted: #8a9e85;
+      --accent: #a8c57e;
+      --accent-dim: rgba(168, 197, 126, 0.15);
+      --accent-glow: rgba(168, 197, 126, 0.35);
+      --nav-bg: rgba(13, 22, 16, 0.85);
+      --footer-bg: #0a110c;
+      --shadow: 0 8px 40px rgba(0, 0, 0, 0.45);
+    }
+
+    [data-theme="light"] {
+      --bg: #f4f8f0;
+      --bg2: #eef4e8;
+      --card-bg: rgba(255, 255, 255, 0.75);
+      --border: rgba(0, 0, 0, 0.1);
+      --text: #1a2416;
+      --text-muted: #5a7050;
+      --accent: #5a8a2e;
+      --accent-dim: rgba(90, 138, 46, 0.12);
+      --accent-glow: rgba(90, 138, 46, 0.25);
+      --nav-bg: rgba(244, 248, 240, 0.9);
+      --footer-bg: #e6f0de;
+      --shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    /* ═══════════════════════════════════════════
+       RESET / BASE
+    ═══════════════════════════════════════════ */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      transition: background 0.4s, color 0.4s;
+    }
+
+    /* ═══════════════════════════════════════════
+       PAGE TRANSITION OVERLAY
+    ═══════════════════════════════════════════ */
+    #page-transition {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: var(--bg);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+    }
+
+    #page-transition.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    /* ═══════════════════════════════════════════
+       BACK TO TOP
+    ═══════════════════════════════════════════ */
+    #back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 999;
+      background: var(--accent);
+      color: #1a1a1a;
+      border: none;
+      border-radius: 50px;
+      padding: 0.65rem 1.2rem;
+      font-size: 0.88rem;
+      font-weight: 700;
+      font-family: Manrope, sans-serif;
+      cursor: pointer;
+      box-shadow: 0 4px 20px var(--accent-glow);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(12px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    #back-to-top.visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    #back-to-top:hover {
+      filter: brightness(1.1);
+    }
+
+    /* ═══════════════════════════════════════════
+       NAVBAR
+    ═══════════════════════════════════════════ */
+    #mainNav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: var(--nav-bg);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 0;
+      transition: transform 0.35s ease, background 0.4s;
+    }
+
+    #mainNav.hide {
+      transform: translateY(-100%);
+    }
+
+    #mainNav .container {
+      justify-content: center;
+    }
+
+    .navbar-brand {
+      font-family: Manrope, sans-serif;
+      font-weight: 800;
+      font-size: 1.2rem;
+      color: var(--text) !important;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+    }
+
+    .navbar-brand img {
+      border-radius: 8px;
+    }
+
+    #themeToggle {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--accent);
+      font-size: 1rem;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    #themeToggle:hover {
+      background: var(--accent-dim);
+    }
+
+    .nav-link {
+      color: var(--text-muted) !important;
+      font-weight: 600;
+    }
+
+    .nav-link:hover {
+      color: var(--accent) !important;
+    }
+
+    /* ═══════════════════════════════════════════
+       BLOBS / AMBIENT BACKGROUND
+    ═══════════════════════════════════════════ */
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      opacity: 0.18;
+      z-index: 0;
+    }
+
+    .blob-1 {
+      width: 500px;
+      height: 500px;
+      background: #3d6e2e;
+      top: -120px;
+      left: -100px;
+    }
+
+    .blob-2 {
+      width: 400px;
+      height: 400px;
+      background: #1a5c3a;
+      top: 200px;
+      right: -80px;
+    }
+
+    .blob-3 {
+      width: 320px;
+      height: 320px;
+      background: #2d7a4f;
+      bottom: -60px;
+      left: 30%;
+    }
+
+    /* ═══════════════════════════════════════════
+       SECTION DIVIDER
+    ═══════════════════════════════════════════ */
+    .section-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0;
+    }
+
+    /* ═══════════════════════════════════════════
+       HERO
+    ═══════════════════════════════════════════ */
+    #hero {
+      padding-top: 6rem;
+      padding-bottom: 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-eyebrow {
+      display: inline-block;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--accent);
+      background: var(--accent-dim);
+      border: 1px solid rgba(168, 197, 126, 0.2);
+      border-radius: 50px;
+      padding: 0.3rem 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-title {
+      font-family: Manrope, sans-serif;
+      font-weight: 900;
+      font-size: clamp(2.4rem, 5vw, 3.6rem);
+      line-height: 1.12;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-title span {
+      color: var(--accent);
+    }
+
+    /* ── Hero Visual / Glow Circle ── */
+    .hero-visual-col {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding-top: 2.8rem;
+    }
+
+    @media (max-width: 991.98px) {
+      .hero-visual-col {
+        align-items: center;
+        padding-top: 0;
+      }
+    }
+
+    .hero-glow-circle {
+      width: 250px;
+      height: 250px;
+      /* ── ENLARGED: scale 1.72× without affecting layout flow ── */
+      transform: scale(1.72);
+      transform-origin: top left;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 40%, rgba(168, 197, 126, 0.18) 0%, rgba(168, 197, 126, 0.04) 60%, transparent 100%);
+      border: 2px solid rgba(168, 197, 126, 0.25);
+      box-shadow:
+        0 0 60px rgba(168, 197, 126, 0.18),
+        0 0 120px rgba(168, 197, 126, 0.08),
+        inset 0 0 40px rgba(168, 197, 126, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    @media (max-width: 991.98px) {
+      .hero-glow-circle {
+        transform: scale(1.72);
+        transform-origin: center top;
+      }
+    }
+
+    .hero-glow-circle img {
+      border-radius: 50%;
+    }
+
+    /* Orbit badges */
+    .orbit-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text);
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 0.35rem 0.85rem;
+      margin-top: 0.55rem;
+      backdrop-filter: blur(8px);
+    }
+
+    .orbit-badge i {
+      color: var(--accent);
+    }
+
+    /* Hero event card */
+    .hero-event-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.2rem 1.4rem;
+      margin-top: 1rem;
+    }
+
+    .hero-event-card .event-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+    }
+
+    .hero-event-card .event-row {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-bottom: 0.35rem;
+    }
+
+    .hero-event-card .event-row i {
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .hero-event-title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    /* Hero map */
+    .hero-map {
+      border-radius: 14px;
+      overflow: hidden;
+      margin-top: 1rem;
+      border: 1px solid var(--border);
+      height: 180px;
+    }
+
+    .hero-map iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+      filter: grayscale(25%) contrast(0.92);
+    }
+
+    /* Stat cards */
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-family: Manrope, sans-serif;
+      font-weight: 900;
+      font-size: 1.6rem;
+      color: var(--accent);
+    }
+
+    .stat-label {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-top: 0.2rem;
+    }
+
+    /* ═══════════════════════════════════════════
+       BUTTONS
+    ═══════════════════════════════════════════ */
+    .btn-primary-k {
+      display: inline-flex;
+      align-items: center;
+      background: var(--accent);
+      color: #1a1a1a;
+      font-family: Manrope, sans-serif;
+      font-weight: 700;
+      font-size: 0.92rem;
+      border: none;
+      border-radius: 50px;
+      padding: 0.7rem 1.6rem;
+      cursor: pointer;
+      box-shadow: 0 4px 18px var(--accent-glow);
+      transition: filter 0.2s, transform 0.15s, box-shadow 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary-k:hover {
+      filter: brightness(1.08);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 28px var(--accent-glow);
+    }
+
+    .btn-outline-k {
+      display: inline-flex;
+      align-items: center;
+      background: transparent;
+      color: var(--text);
+      font-family: Manrope, sans-serif;
+      font-weight: 700;
+      font-size: 0.92rem;
+      border: 1.5px solid var(--border);
+      border-radius: 50px;
+      padding: 0.7rem 1.6rem;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s, background 0.2s, transform 0.15s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-outline-k:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-dim);
+      transform: translateY(-1px);
+    }
+
+    /* Ripple */
+    .ripple-btn {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.22);
+      transform: scale(0);
+      animation: ripple-anim 0.55s linear;
+      pointer-events: none;
+    }
+
+    @keyframes ripple-anim {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+
+    /* ═══════════════════════════════════════════
+       SECTION COMMONS
+    ═══════════════════════════════════════════ */
+    section {
+      padding: 5rem 0;
+      position: relative;
+    }
+
+    .section-chip {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-dim);
+      border: 1px solid rgba(168, 197, 126, 0.2);
+      border-radius: 50px;
+      padding: 0.28rem 0.9rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .section-title {
+      font-family: Manrope, sans-serif;
+      font-weight: 800;
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .section-sub {
+      font-size: 1rem;
+      color: var(--text-muted);
+      max-width: 520px;
+      margin: 0 auto;
+      line-height: 1.65;
+    }
+
+    /* ═══════════════════════════════════════════
+       HOW IT WORKS
+    ═══════════════════════════════════════════ */
+    .process-container {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .process-box {
+      flex: 1;
+      min-width: 300px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 2rem;
+    }
+
+    .process-box.volunteer-box {
+      border-color: rgba(168, 197, 126, 0.3);
+    }
+
+    .process-box.ngo-box {
+      border-color: rgba(100, 180, 220, 0.3);
+    }
+
+    .steps-vertical {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .step-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      position: relative;
+    }
+
+    .step-number {
+      display: inline-block;
+      font-family: Manrope, sans-serif;
+      font-weight: 900;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      background: var(--accent-dim);
+      border-radius: 6px;
+      padding: 0.2rem 0.5rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .step-card h4 {
+      font-family: Manrope, sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text);
+      margin-bottom: 0.35rem;
+    }
+
+    .step-card p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* ═══════════════════════════════════════════
+       EVENTS
+    ═══════════════════════════════════════════ */
+    .event-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: transform 0.25s, box-shadow 0.25s;
+      height: 100%;
+    }
+
+    .event-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+    }
+
+    .event-thumb {
+      position: relative;
+      height: 170px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #1c3a20, #2a5240);
+    }
+
+    .event-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+
+    .event-card:hover .event-thumb img {
+      transform: scale(1.04);
+    }
+
+    .badge-type {
+      position: absolute;
+      top: 0.75rem;
+      left: 0.75rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      background: rgba(13, 22, 16, 0.78);
+      color: var(--accent);
+      border: 1px solid rgba(168, 197, 126, 0.3);
+      border-radius: 50px;
+      padding: 0.22rem 0.65rem;
+      backdrop-filter: blur(6px);
+    }
+
+    .event-body {
+      padding: 1.2rem;
+    }
+
+    .event-ngo {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .event-title {
+      font-family: Manrope, sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text);
+      margin-bottom: 0.6rem;
+      line-height: 1.4;
+    }
+
+    .event-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .event-meta span {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .event-meta i {
+      color: var(--accent);
+    }
+
+    .participant-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--accent);
+      background: rgba(168, 197, 126, 0.1);
+      border: 1px solid rgba(168, 197, 126, 0.2);
+      border-radius: 50px;
+      padding: 0.25rem 0.7rem;
+      margin-bottom: 0.6rem;
+    }
+
+    /* ═══════════════════════════════════════════
+       WHY KARUUNA / FEATURE CARDS
+    ═══════════════════════════════════════════ */
+    .feature-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2rem;
+      height: 100%;
+      transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+      border-color: rgba(168, 197, 126, 0.25);
+    }
+
+    .feature-icon {
+      width: 52px;
+      height: 52px;
+      background: var(--accent-dim);
+      border: 1px solid rgba(168, 197, 126, 0.2);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      color: var(--accent);
+      margin-bottom: 1.1rem;
+    }
+
+    .feature-card h4 {
+      font-family: Manrope, sans-serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .feature-card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    /* ═══════════════════════════════════════════
+       CTA BANNER
+    ═══════════════════════════════════════════ */
+    #cta-banner {
+      background: linear-gradient(135deg, rgba(168, 197, 126, 0.07) 0%, rgba(30, 70, 40, 0.15) 100%);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 5rem 0;
+    }
+
+    .cta-title {
+      font-family: Manrope, sans-serif;
+      font-weight: 900;
+      font-size: clamp(2rem, 4vw, 3rem);
+      color: var(--text);
+      line-height: 1.2;
+    }
+
+    .cta-sub {
+      font-size: 1rem;
+      color: var(--text-muted);
+    }
+
+    /* ═══════════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════════ */
+    footer {
+      background: var(--footer-bg);
+      border-top: 1px solid var(--border);
+      padding: 3.5rem 0 2rem;
+    }
+
+    .footer-brand {
+      font-family: Manrope, sans-serif;
+      font-weight: 800;
+      font-size: 1.15rem;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .footer-brand img {
+      border-radius: 7px;
+    }
+
+    .footer-tagline {
+      font-size: 0.82rem;
+      color: var(--accent);
+      font-style: italic;
+      letter-spacing: 0.02em;
+    }
+
+    .footer-heading {
+      font-family: Manrope, sans-serif;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    .footer-link {
+      display: block;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      margin-bottom: 0.5rem;
+      transition: color 0.2s;
+    }
+
+    .footer-link:hover {
+      color: var(--accent);
+    }
+
+    .social-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      text-decoration: none;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+    }
+
+    .social-icon:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+      background: var(--accent-dim);
+    }
+
+    .footer-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2rem 0 1.25rem;
+    }
+
+    .footer-bottom {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    /* ═══════════════════════════════════════════
+       SCROLL REVEAL
+    ═══════════════════════════════════════════ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .d-100 {
+      transition-delay: 0.1s;
+    }
+
+    .d-200 {
+      transition-delay: 0.2s;
+    }
+
+    .d-300 {
+      transition-delay: 0.3s;
+    }
+
+    .d-400 {
+      transition-delay: 0.4s;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="page-transition"></div>
+  <button id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to Top ↑</button>
+
+  <!-- ═══ NAVBAR ═══ -->
+  <nav id="mainNav" class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand ripple-btn" href="#">
+        <!-- Replace src with your logo path -->
+        <img src="{% static 'image/weblogo.png' %}" alt="logo" width="30">Karuuna
+      </a>
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <i class="bi bi-list fs-4" style="color:var(--accent)"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav ms-auto gap-2 align-items-lg-center"></ul>
+        <div class="d-flex align-items-center gap-3 ms-lg-4 mt-3 mt-lg-0">
+          <a href="#" class="nav-link" style="font-weight:600;color:var(--text-muted)">Sign In</a>
+          <button id="themeToggle" title="Toggle theme">
+            <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══ HERO ═══ -->
+  <section id="hero">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="container position-relative">
+      <div class="row align-items-start gy-3 gy-lg-1">
+
+        <!-- LEFT: logo / glow circle column -->
+        <div class="col-lg-6 hero-visual-col reveal">
+          <div class="hero-glow-circle">
+            <img src="{% static 'image/weblogo.png' %}" alt="logo" width="160">
+          </div>
+          <div class="orbit-badge" style="margin-top:5.5rem"><i class="bi bi-lightning-charge-fill"></i> 1,200 credits
+            earned today</div>
+          <div class="orbit-badge"><i class="bi bi-geo-alt-fill"></i> 14 events near you</div>
+          <div class="orbit-badge"><i class="bi bi-people-fill"></i> 320 volunteers active</div>
+        </div>
+
+        <!-- RIGHT: text column -->
+        <div class="col-lg-6">
+          <div class="hero-eyebrow reveal">🌿 India's Green Volunteer Network</div>
+          <h1 class="hero-title reveal d-100">
+            # Small Steps<br><span>Big Impact.</span>
+          </h1>
+
+          <div class="hero-event-card reveal d-200">
+            <div class="event-label"><i class="bi bi-geo-alt-fill me-1"></i>Delhi NCR · Today</div>
+            <div class="hero-event-title">Tree Plantation Drive – Aravalli Ridge</div>
+            <div class="event-row"><i class="bi bi-calendar3"></i> Tuesday, 7 April 2026 · 7:00 AM</div>
+            <div class="event-row"><i class="bi bi-geo-alt"></i> Gurugram, Haryana</div>
+            <div class="event-row"><i class="bi bi-people-fill"></i> 8 / 20 volunteers joined</div>
+            <div class="event-row"><i class="bi bi-building"></i> Green Earth Foundation</div>
+          </div>
+
+          <div class="hero-map reveal d-300">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d224143.9!2d77.06!3d28.52!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d1df30d416b27%3A0x4a63f1a48a82c6a3!2sGurugram%2C%20Haryana!5e0!3m2!1sen!2sin!4v1680000000000"
+              allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Event Location Map">
+            </iframe>
+          </div>
+
+          <div class="d-flex flex-wrap gap-3 mt-3 reveal d-400">
+            <button class="btn-primary-k ripple-btn" onclick="handleCTA(this,'/signup/')">
+              <i class="bi bi-person-heart me-2"></i>Join as Volunteer
+            </button>
+            <button class="btn-outline-k ripple-btn" onclick="handleCTA(this,'/signup/')">
+              <i class="bi bi-building me-2"></i>Register NGO
+            </button>
+          </div>
+
+          <div class="row g-3 mt-3 reveal d-400">
+            <div class="col-4">
+              <div class="stat-card">
+                <div class="stat-number">128</div>
+                <div class="stat-label">Events</div>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="stat-card">
+                <div class="stat-number">32</div>
+                <div class="stat-label">NGOs</div>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="stat-card">
+                <div class="stat-number">540</div>
+                <div class="stat-label">Volunteers</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ═══ HOW IT WORKS ═══ -->
+  <section id="how-it-works">
+    <div class="container">
+      <div class="text-center mb-5">
+        <div class="section-chip reveal">Process</div>
+        <h2 class="section-title reveal d-100">How It Works</h2>
+        <p class="section-sub reveal d-200">Simple steps for volunteers and NGOs to drive real environmental impact.</p>
+      </div>
+      <div class="process-container reveal">
+        <div class="process-box volunteer-box">
+          <h3 class="mb-4" style="color:var(--accent)"><i class="bi bi-person-walking me-2"></i>For Volunteers</h3>
+          <div class="steps-vertical">
+            <div class="step-card">
+              <span class="step-number">01</span>
+              <h4>Find an Event</h4>
+              <p>Browse verified environmental events by location, cause, or NGO near you.</p>
+            </div>
+            <div class="step-card">
+              <span class="step-number">02</span>
+              <h4>Attend & Contribute</h4>
+              <p>Register with one tap. Show up, participate, and make a real-world difference.</p>
+            </div>
+            <div class="step-card">
+              <span class="step-number">03</span>
+              <h4>Earn Green Credits</h4>
+              <p>Every hour of service earns Green Credits. Redeem for rewards or donate them.</p>
+            </div>
+          </div>
+        </div>
+        <div class="process-box ngo-box">
+          <h3 class="mb-4" style="color:#64b4dc"><i class="bi bi-building-check me-2"></i>For NGOs</h3>
+          <div class="steps-vertical">
+            <div class="step-card">
+              <span class="step-number">01</span>
+              <h4>Create Event</h4>
+              <p>Post your drive with details, date, location, and volunteer capacity in minutes.</p>
+            </div>
+            <div class="step-card">
+              <span class="step-number">02</span>
+              <h4>Manage Participants</h4>
+              <p>Track registrations, approve volunteers, send reminders, and coordinate attendance.</p>
+            </div>
+            <div class="step-card">
+              <span class="step-number">03</span>
+              <h4>Assign Green Credits</h4>
+              <p>Review attendance via QR check-in and auto-assign Green Credits to volunteers.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ═══ EVENTS ═══ -->
+  <section id="events">
+    <div class="container">
+      <div class="text-center mb-5">
+        <div class="section-chip reveal">Events</div>
+        <h2 class="section-title reveal d-100">Featured Events</h2>
+        <p class="section-sub reveal d-200">Upcoming opportunities to get involved right now.</p>
+      </div>
+      <div class="row g-4">
+
+        <div class="col-md-6 col-lg-3 reveal">
+          <div class="event-card">
+            <div class="event-thumb">
+              <img src="{% static 'image/tree.jpg' %}" alt="Tree Plantation Gurugram" />
+              <span class="badge-type">Tree Planting</span>
+            </div>
+            <div class="event-body">
+              <div class="event-ngo"><i class="bi bi-building me-1"></i>Green Earth Foundation</div>
+              <div class="event-title">Tree Plantation Drive – Gurugram</div>
+              <div class="event-meta">
+                <span><i class="bi bi-calendar3"></i>7 Apr 2026</span>
+                <span><i class="bi bi-geo-alt"></i> Gurugram, HR</span>
+              </div>
+              <div class="participant-badge"><i class="bi bi-people-fill"></i> 6 / 10 joined</div>
+              <button class="btn-primary-k ripple-btn w-100" onclick="handleCTA(this,'/signup/')">
+                <i class="bi bi-check2-circle me-2"></i>Register Now
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3 reveal d-200">
+          <div class="event-card">
+            <div class="event-thumb">
+              <img src="{% static 'image/river.jpg' %}" alt="Clean Yamuna Delhi" />
+              <span class="badge-type">River Cleanup</span>
+            </div>
+            <div class="event-body">
+              <div class="event-ngo"><i class="bi bi-building me-1"></i>Yamuna Prahari</div>
+              <div class="event-title">Clean Yamuna Drive – Delhi</div>
+              <div class="event-meta">
+                <span><i class="bi bi-calendar3"></i> 12 Apr 2026</span>
+                <span><i class="bi bi-geo-alt"></i> Delhi, DL</span>
+              </div>
+              <div class="participant-badge"><i class="bi bi-people-fill"></i> 14 / 25 joined</div>
+              <button class="btn-primary-k ripple-btn w-100" onclick="handleCTA(this,'#')">
+                <i class="bi bi-check2-circle me-2"></i>Register Now
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3 reveal d-300">
+          <div class="event-card">
+            <div class="event-thumb">
+              <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&q=80"
+                alt="School Awareness Workshop Noida" />
+              <span class="badge-type">Eco Education</span>
+            </div>
+            <div class="event-body">
+              <div class="event-ngo"><i class="bi bi-building me-1"></i>Prakriti Shiksha Sangh</div>
+              <div class="event-title">School Awareness Workshop – Noida</div>
+              <div class="event-meta">
+                <span><i class="bi bi-calendar3"></i> 19 Apr 2026</span>
+                <span><i class="bi bi-geo-alt"></i> Noida, UP</span>
+              </div>
+              <div class="participant-badge"><i class="bi bi-people-fill"></i> 9 / 15 joined</div>
+              <button class="btn-primary-k ripple-btn w-100" onclick="handleCTA(this,'#')">
+                <i class="bi bi-check2-circle me-2"></i>Register Now
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3 reveal d-400">
+          <div class="event-card">
+            <div class="event-thumb" style="background:linear-gradient(135deg,#1d3d2f,#2a5240)">
+              <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=600&q=80"
+                alt="College Sustainability Seminar DU" />
+              <span class="badge-type">Sustainability</span>
+            </div>
+            <div class="event-body">
+              <div class="event-ngo"><i class="bi bi-building me-1"></i>EcoVoice Initiative</div>
+              <div class="event-title">College Sustainability Seminar – DU</div>
+              <div class="event-meta">
+                <span><i class="bi bi-calendar3"></i> 26 Apr 2026</span>
+                <span><i class="bi bi-geo-alt"></i> Delhi University</span>
+              </div>
+              <div class="participant-badge"><i class="bi bi-people-fill"></i> 22 / 50 joined</div>
+              <button class="btn-primary-k ripple-btn w-100" onclick="handleCTA(this,'#')">
+                <i class="bi bi-check2-circle me-2"></i>Register Now
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="text-center mt-5 reveal">
+        <button class="btn-outline-k ripple-btn" onclick="handleCTA(this,'#')">
+          <i class="bi bi-grid me-2"></i>View All Events
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ═══ WHY KARUUNA ═══ -->
+  <section id="why-karuuna">
+    <div class="container">
+      <div class="text-center mb-5">
+        <div class="section-chip reveal">Why Karuuna</div>
+        <h2 class="section-title reveal d-100">Built for Impact</h2>
+        <p class="section-sub reveal d-200">Everything you need to discover, act, and grow as an eco-citizen.</p>
+      </div>
+      <div class="row g-4">
+
+        <div class="col-md-4 reveal">
+          <div class="feature-card">
+            <div class="feature-icon"><i class="bi bi-compass"></i></div>
+            <h4>Smart Discovery</h4>
+            <p>AI-powered event matching based on your location, skills, and interests. Never miss an opportunity to
+              contribute near you.</p>
+            <ul class="mt-3 ps-3" style="color:var(--text-muted);font-size:0.88rem;line-height:2">
+              <li>Location-based recommendations</li>
+              <li>Skill & interest filters</li>
+              <li>Real-time availability alerts</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-md-4 reveal d-200">
+          <div class="feature-card">
+            <div class="feature-icon"><i class="bi bi-currency-exchange"></i></div>
+            <h4>Green Credits System</h4>
+            <p>Your hours of service are transformed into Green Credits — a transparent ledger of your environmental
+              contributions.</p>
+            <div class="mt-3 p-3"
+              style="background:rgba(168,197,126,0.06);border-radius:12px;border:1px solid var(--border)">
+              <div style="color:var(--accent);font-weight:700;font-size:1.4rem;font-family:Manrope">🪙 12,840</div>
+              <small style="color:var(--text-muted)">credits rewarded this month</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 reveal d-300">
+          <div class="feature-card">
+            <div class="feature-icon"><i class="bi bi-megaphone"></i></div>
+            <h4>EcoVoice Profile</h4>
+            <p>Your public eco-citizenship profile. Share your volunteer journey, showcase badges, and inspire your
+              network.</p>
+            <div class="d-flex gap-2 mt-3 flex-wrap">
+              <span class="badge rounded-pill"
+                style="background:rgba(168,197,126,0.12);color:var(--accent);border:1px solid rgba(168,197,126,0.2);padding:0.4rem 0.8rem">🌱
+                Seedling</span>
+              <span class="badge rounded-pill"
+                style="background:rgba(168,197,126,0.12);color:var(--accent);border:1px solid rgba(168,197,126,0.2);padding:0.4rem 0.8rem">🌿
+                Sprout</span>
+              <span class="badge rounded-pill"
+                style="background:rgba(168,197,126,0.12);color:var(--accent);border:1px solid rgba(168,197,126,0.2);padding:0.4rem 0.8rem">🌳
+                Guardian</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ═══ CTA BANNER ═══ -->
+  <section id="cta-banner">
+    <div class="container position-relative text-center">
+      <div class="reveal">
+        <div class="section-chip">Get Started</div>
+        <h2 class="cta-title mt-2">Let's paint the world<br>in the shades of green</h2>
+        <p class="cta-sub mt-3 mb-5">Join 540+ volunteers already making a difference across Delhi NCR.</p>
+        <div class="d-flex justify-content-center flex-wrap gap-3">
+          <button class="btn-primary-k ripple-btn" style="padding:0.9rem 2.2rem;font-size:1.05rem"
+            onclick="handleCTA(this,'#')">
+            <i class="bi bi-heart-fill me-2"></i>Yes, I Want to
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer>
+    <div class="container">
+      <div class="row gy-4">
+        <div class="col-lg-4">
+          <div class="footer-brand">
+            <img src="https://placehold.co/30x30/a8c57e/1a1a1a?text=K" alt="logo" width="30">Karuuna
+          </div>
+          <div class="footer-tagline">"#Small Steps, big impact"</div>
+          <p class="mt-3" style="color:var(--text-muted);font-size:0.88rem;max-width:280px;line-height:1.65">
+            Connecting passionate individuals with NGOs to create grassroots environmental change across India.
+          </p>
+          <div class="d-flex gap-2 mt-3">
+            <a href="#" class="social-icon"><i class="bi bi-twitter-x"></i></a>
+            <a href="#" class="social-icon"><i class="bi bi-instagram"></i></a>
+            <a href="#" class="social-icon"><i class="bi bi-linkedin"></i></a>
+          </div>
+        </div>
+        <div class="col-6 col-lg-2">
+          <div class="footer-heading">Company</div>
+          <a href="#" class="footer-link">About Us</a>
+        </div>
+        <div class="col-6 col-lg-2">
+          <div class="footer-heading">Support</div>
+          <a href="#" class="footer-link">Help Center</a>
+          <a href="#" class="footer-link">Privacy Policy</a>
+        </div>
+        <div class="col-lg-2"></div>
+      </div>
+      <hr class="footer-divider" />
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 footer-bottom">
+        <span>© 2026 Karuuna. All rights reserved.</span>
+        <span>Made with 💚 for a greener Bharat</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Navbar hide on scroll down
+    const nav = document.getElementById('mainNav');
+    let lastY = 0;
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      nav.classList.toggle('hide', y > lastY && y > 100);
+      lastY = y;
+    });
+
+    // Theme toggle
+    const html = document.documentElement;
+    const themeBtn = document.getElementById('themeToggle');
+    const icon = document.getElementById('themeIcon');
+    themeBtn.addEventListener('click', () => {
+      const isDark = html.getAttribute('data-theme') === 'dark';
+      html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      icon.className = isDark ? 'bi bi-sun-fill' : 'bi bi-moon-stars-fill';
+    });
+
+    // Ripple effect
+    document.querySelectorAll('.ripple-btn').forEach(btn => {
+      btn.addEventListener('click', function (e) {
+        const ripple = document.createElement('span');
+        ripple.className = 'ripple';
+        const rect = this.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        ripple.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX - rect.left - size / 2}px;top:${e.clientY - rect.top - size / 2}px`;
+        this.appendChild(ripple);
+        ripple.addEventListener('animationend', () => ripple.remove());
+      });
+    });
+
+    // CTA with page transition
+    function handleCTA(btn, url) {
+      const overlay = document.getElementById('page-transition');
+      overlay.classList.add('active');
+      setTimeout(() => {
+        overlay.classList.remove('active');
+        if (url && url !== '#') window.location.href = url;
+      }, 700);
+    }
+
+    // Scroll reveal
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Back to top
+    const backTopBtn = document.getElementById('back-to-top');
+    window.addEventListener('scroll', () => {
+      const scrolled = window.scrollY + window.innerHeight;
+      const total = document.body.scrollHeight;
+      backTopBtn.classList.toggle('visible', scrolled >= total - 320);
+    });
+  </script>
+</body>
+
+</html>

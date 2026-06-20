@@ -1,0 +1,845 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us — Karuuna 🌱</title>
+  <link rel="icon" href="{% static 'image/weblogo.png' %}">
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <link rel="stylesheet" href="{% static 'karuuna.css' %}" />
+
+  <style>
+    :root {
+      --bg: #1a2614;
+      --primary: #4F633D;
+      --secondary: #8BA194;
+      --cream: #FFF7E2;
+      --card-bg: #243318;
+      --accent: #A8C57E;
+      --text: #FFF7E2;
+      --text-muted: #8BA194;
+      --border: rgba(139, 161, 148, 0.18);
+      --glass: rgba(36, 51, 24, 0.55);
+      --shadow: 0 8px 40px rgba(0, 0, 0, 0.45);
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+      --radius-pill: 50px;
+    }
+
+    [data-theme="light"] {
+      --bg: #f4f8f0;
+      --card-bg: #ddebd5;
+      --accent: #3a5c28;
+      --text: #1a2614;
+      --text-muted: #4F633D;
+      --border: rgba(79, 99, 61, 0.18);
+      --glass: rgba(220, 235, 208, 0.72);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      line-height: 1.6;
+      overflow-x: hidden;
+      transition: background 0.4s, color 0.4s;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+      font-family: 'Manrope', sans-serif;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+    }
+
+    ::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 10px;
+    }
+
+    /* NAVBAR */
+    #mainNav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 1rem 0;
+      background: var(--glass);
+      backdrop-filter: blur(18px) saturate(1.4);
+      -webkit-backdrop-filter: blur(18px) saturate(1.4);
+      border-bottom: 1px solid var(--border);
+      transition: transform 0.35s ease, background 0.4s;
+    }
+
+    #mainNav.hide {
+      transform: translateY(-110%);
+    }
+
+    .navbar-brand {
+      font-family: 'Manrope', sans-serif;
+      font-weight: 900;
+      font-size: 1.45rem;
+      color: var(--accent) !important;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .nav-link {
+      color: var(--text-muted) !important;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: var(--accent) !important;
+    }
+
+    #themeToggle {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--accent);
+      border-radius: var(--radius-pill);
+      padding: 0.35rem 0.8rem;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    #themeToggle:hover {
+      background: var(--primary);
+    }
+
+    /* PAGE HEADER */
+    .page-header {
+      padding: 8rem 0 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 30% 50%, rgba(168, 197, 126, 0.08) 0%, transparent 65%);
+    }
+
+    .page-header::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 80% 20%, rgba(168, 197, 126, 0.05) 0%, transparent 55%);
+    }
+
+    .page-header-title {
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      font-weight: 900;
+      letter-spacing: -1.5px;
+    }
+
+    .page-header-sub {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      margin-top: 0.7rem;
+      max-width: 560px;
+    }
+
+    /* SECTION CHIP */
+    .section-chip {
+      display: inline-block;
+      background: rgba(168, 197, 126, 0.1);
+      color: var(--accent);
+      border: 1px solid rgba(168, 197, 126, 0.25);
+      border-radius: var(--radius-pill);
+      padding: 0.28rem 0.9rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+    }
+
+    /* CARDS */
+    .k-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      height: 100%;
+      transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+    }
+
+    .k-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.35);
+      border-color: rgba(168, 197, 126, 0.3);
+    }
+
+    .k-card-icon {
+      width: 52px;
+      height: 52px;
+      background: rgba(168, 197, 126, 0.12);
+      border: 1px solid rgba(168, 197, 126, 0.2);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .k-card h4 {
+      font-size: 1.1rem;
+      font-weight: 800;
+      margin-bottom: 0.6rem;
+    }
+
+    .k-card p {
+      color: var(--text-muted);
+      font-size: 0.93rem;
+      line-height: 1.65;
+    }
+
+    /* MISSION SECTION */
+    .mission-section {
+      padding: 5rem 0;
+    }
+
+    .mission-block {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 3rem;
+    }
+
+    .mission-block h2 {
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 900;
+      letter-spacing: -1px;
+      margin-bottom: 1rem;
+    }
+
+    .mission-block p {
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 1.75;
+    }
+
+    /* TEAM SECTION */
+    .team-section {
+      padding: 5rem 0;
+    }
+
+    .team-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      text-align: center;
+      height: 100%;
+      transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+    }
+
+    .team-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.35);
+      border-color: rgba(168, 197, 126, 0.3);
+    }
+
+    .team-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      margin: 0 auto 1.2rem;
+      border: 2px solid rgba(168, 197, 126, 0.3);
+    }
+
+    .team-card h5 {
+      font-weight: 800;
+      margin-bottom: 0.2rem;
+    }
+
+    .team-card .role {
+      color: var(--accent);
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 0.8rem;
+    }
+
+    .team-card p {
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      line-height: 1.6;
+    }
+
+    /* STATS */
+    .stats-section {
+      padding: 5rem 0;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .stat-num {
+      font-family: 'Manrope', sans-serif;
+      font-size: 2.8rem;
+      font-weight: 900;
+      color: var(--accent);
+      letter-spacing: -2px;
+      line-height: 1;
+    }
+
+    .stat-label {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-top: 0.4rem;
+    }
+
+    /* VALUES */
+    .values-section {
+      padding: 5rem 0;
+    }
+
+    .value-item {
+      display: flex;
+      gap: 1.2rem;
+      align-items: flex-start;
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .value-item:last-child {
+      border-bottom: none;
+    }
+
+    .value-num {
+      font-family: 'Manrope', sans-serif;
+      font-size: 2rem;
+      font-weight: 900;
+      color: rgba(168, 197, 126, 0.25);
+      line-height: 1;
+      flex-shrink: 0;
+      width: 48px;
+    }
+
+    .value-item h5 {
+      font-weight: 800;
+      margin-bottom: 0.35rem;
+    }
+
+    .value-item p {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      line-height: 1.65;
+      margin: 0;
+    }
+
+    /* REVEAL */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    .d-100 {
+      transition-delay: .1s
+    }
+
+    .d-200 {
+      transition-delay: .2s
+    }
+
+    .d-300 {
+      transition-delay: .3s
+    }
+
+    .d-400 {
+      transition-delay: .4s
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--card-bg);
+      border-top: 1px solid var(--border);
+      padding: 3rem 0 1.5rem;
+    }
+
+    .footer-brand {
+      font-family: 'Manrope', sans-serif;
+      font-weight: 900;
+      font-size: 1.4rem;
+      color: var(--accent);
+    }
+
+    .footer-bottom {
+      color: var(--text-muted);
+      font-size: 0.82rem;
+    }
+
+    .footer-divider {
+      border-color: var(--border);
+      margin: 1.5rem 0 1rem;
+    }
+
+    .social-icon {
+      width: 34px;
+      height: 34px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .social-icon:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* BACK TO TOP */
+    #backToTop {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 800;
+      background: var(--accent);
+      color: #1a2614;
+      border: none;
+      border-radius: var(--radius-pill);
+      padding: 0.6rem 1.2rem;
+      font-size: 0.82rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 6px 24px rgba(168, 197, 126, 0.35);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(16px);
+      transition: opacity 0.3s, transform 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    #backToTop.visible {
+      opacity: 1;
+      pointer-events: all;
+      transform: translateY(0);
+    }
+
+    #backToTop:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(168, 197, 126, 0.45);
+    }
+
+    /* CTA BAND */
+    .cta-band {
+      background: linear-gradient(135deg, var(--primary), rgba(168, 197, 126, 0.15));
+      border: 1px solid rgba(168, 197, 126, 0.2);
+      border-radius: var(--radius-lg);
+      padding: 3.5rem 2rem;
+      text-align: center;
+    }
+
+    .cta-band h2 {
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      font-weight: 900;
+      letter-spacing: -1px;
+      margin-bottom: 0.8rem;
+    }
+
+    .cta-band p {
+      color: var(--text-muted);
+      max-width: 460px;
+      margin: 0 auto 2rem;
+    }
+
+    .btn-primary-k {
+      background: var(--accent);
+      color: #1a2614;
+      border: none;
+      border-radius: var(--radius-pill);
+      font-family: 'Manrope', sans-serif;
+      font-weight: 700;
+      padding: 0.82rem 2rem;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-primary-k:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(168, 197, 126, 0.4);
+    }
+
+    .btn-outline-k {
+      background: transparent;
+      color: var(--accent);
+      border: 1.5px solid var(--accent);
+      border-radius: var(--radius-pill);
+      font-family: 'Manrope', sans-serif;
+      font-weight: 700;
+      padding: 0.82rem 2rem;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: background 0.2s, color 0.2s, transform 0.2s;
+    }
+
+    .btn-outline-k:hover {
+      background: var(--accent);
+      color: #1a2614;
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav id="mainNav" class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href='/index/'><img src="{% static 'image/weblogo.png' %}" alt="logo"
+          width="30">Karuuna</a>
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu"
+        style="color:var(--accent)">
+        <i class="bi bi-list fs-4"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav mx-auto gap-1">
+
+        </ul>
+        <div class="d-flex align-items-center gap-3 mt-3 mt-lg-0">
+          <a href='/login/' class="nav-link" style="font-weight:600">Sign In</a>
+          <button id="themeToggle" title="Toggle theme"><i class="bi bi-moon-stars-fill" id="themeIcon"></i></button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div class="container position-relative">
+      <div class="section-chip reveal">Our Story</div>
+      <h1 class="page-header-title reveal d-100">Growing a greener<br><span style="color:var(--accent)">India,
+          together.</span></h1>
+      <p class="page-header-sub reveal d-200">Karuuna connects compassionate volunteers with verified NGOs to drive real
+        environmental change — one event, one tree, one community at a time.</p>
+
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <section class="stats-section">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-6 col-lg-3 reveal">
+          <div class="stat-card">
+            <div class="stat-num">12K+</div>
+            <div class="stat-label">Active Volunteers</div>
+          </div>
+        </div>
+        <div class="col-6 col-lg-3 reveal d-100">
+          <div class="stat-card">
+            <div class="stat-num">340+</div>
+            <div class="stat-label">Verified NGO Partners</div>
+          </div>
+        </div>
+        <div class="col-6 col-lg-3 reveal d-200">
+          <div class="stat-card">
+            <div class="stat-num">2.1L</div>
+            <div class="stat-label">Trees Planted</div>
+          </div>
+        </div>
+        <div class="col-6 col-lg-3 reveal d-300">
+          <div class="stat-card">
+            <div class="stat-num">58</div>
+            <div class="stat-label">Cities Covered</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MISSION -->
+  <section class="mission-section">
+    <div class="container">
+      <div class="row g-4 align-items-center">
+        <div class="col-lg-6 reveal">
+          <div class="mission-block">
+            <div class="section-chip">Our Problem</div>
+            <h2>Turning care into <span style="color:var(--accent)">climate action</span></h2>
+            <p class="mt-3">Environmental challenges such as pollution, climate change, deforestation, and waste
+              mismanagement are increasing at an alarming rate. Although many NGOs are actively working to address these
+              issues, they often face difficulties in reaching the right audience, gaining visibility for their
+              initiatives, and coordinating with volunteers effectively. At the same time, many individuals are willing
+              to contribute towards environmental causes but struggle to find trustworthy and accessible opportunities.
+              This disconnect between NGOs and potential volunteers results in reduced participation and limits the
+              overall impact of environmental efforts.
+            </p>
+
+          </div>
+        </div>
+        <div class="col-lg-6 reveal d-200">
+          <div class="mission-block"
+            style="background: linear-gradient(135deg, var(--card-bg), rgba(168,197,126,0.06));">
+            <div class="section-chip">Our Solution</div>
+            <h2>A <span style="color:var(--accent)">carbon-aware</span> generation</h2>
+            <p class="mt-3">Karunna is a centralized digital platform designed to bridge the gap between NGOs and
+              volunteers. It enables NGOs to easily post and manage their environmental events while allowing volunteers
+              to discover and participate in activities based on their interests and availability. By providing a
+              streamlined system for communication, event management, and engagement, Karunna simplifies the process of
+              collaboration. This ensures that motivated individuals can take meaningful action, helping NGOs expand
+              their reach and collectively contribute towards a more sustainable and greener future.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+  <!-- WHY US CARDS -->
+  <section style="padding: 5rem 0;">
+    <div class="container">
+      <div class="text-center mb-5 reveal">
+        <div class="section-chip">Why Karuuna</div>
+        <h2 style="font-size:clamp(1.6rem,3vw,2.2rem);font-weight:900;letter-spacing:-1px;margin-top:0.5rem;">Built
+          differently, <span style="color:var(--accent)">on purpose</span></h2>
+      </div>
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-4 reveal">
+          <div class="k-card">
+            <div class="k-card-icon">🌿</div>
+            <h4>Verified NGO Network</h4>
+            <p>All our NGO partners are manually vetted by our curation team. You'll never volunteer for a cause that
+              isn't legitimate, transparent, and impactful.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 reveal d-100">
+          <div class="k-card">
+            <div class="k-card-icon">🪙</div>
+            <h4>Green Credits System</h4>
+            <p>Every event earns you Green Credits — a real-time ledger of your environmental contribution, redeemable
+              with our growing network of eco-conscious partners.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 reveal d-200">
+          <div class="k-card">
+            <div class="k-card-icon">📍</div>
+            <h4>Hyperlocal Discovery</h4>
+            <p>Smart location matching surfaces eco-events within your neighbourhood, making participation effortless
+              for even the busiest schedules.</p>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4 reveal d-200">
+          <div class="k-card">
+            <div class="k-card-icon">🤝</div>
+            <h4>Community-Led Growth</h4>
+            <p>Our city captains and volunteer leaders shape the platform's direction. Karuuna grows from the ground up,
+              not top down.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 reveal d-300">
+          <div class="k-card">
+            <div class="k-card-icon">🔒</div>
+            <h4>Privacy by Design</h4>
+            <p>Your data is yours. We collect only what's essential, never sell personal information, and give you
+              complete control over your profile and history.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TEAM -->
+  <section class="team-section">
+    <div class="container">
+      <div class="text-center mb-5 reveal">
+
+        <h2 style="font-size:clamp(1.6rem,3vw,2.2rem);font-weight:900;letter-spacing:-1px;margin-top:0.5rem;">The
+          <span style="color:var(--accent)">Team</span>
+        </h2>
+        <p class="mt-2" style="color:var(--text-muted);max-width:480px;margin:0.5rem auto 0;">We're a small,
+          mission-driven team of environmentalists, technologists, and community builders.</p>
+      </div>
+      <div class="row g-4 justify-content-center">
+        <div class="col-sm-6 col-lg-3 reveal">
+          <div class="team-card">
+            <div class="team-avatar">🌱</div>
+            <h5>Dhruvika Mishra</h5>
+            <div class="role">Co-Founder & CEO</div>
+            <p>Former conservation scientist with 8 years at WWF India. Drives Karuuna's mission and NGO partnerships.
+            </p>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3 reveal d-100">
+          <div class="team-card">
+            <div class="team-avatar">🌊</div>
+            <h5>Rohan Wahi</h5>
+            <div class="role">Co-Founder & CTO</div>
+            <p>Ex-Zomato engineer who built community platforms at scale. Passionate about civic tech for climate.</p>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3 reveal d-200">
+          <div class="team-card">
+            <div class="team-avatar">🦋</div>
+            <h5>Ujjwal Saraswat</h5>
+            <div class="role">Head of Community</div>
+            <p>Grassroots organiser who has mobilised over 50,000 volunteers across South India for reforestation.</p>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3 reveal d-300">
+          <div class="team-card">
+            <div class="team-avatar">🌻</div>
+            <h5>Lavani Thakur</h5>
+            <div class="role">Head of NGO Partnerships</div>
+            <p>Social sector veteran with 12 years connecting corporates and civil society for environmental impact.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section style="padding: 5rem 0;">
+    <div class="container">
+      <div class="cta-band reveal">
+        <div class="section-chip" style="margin-bottom:1rem;">Join Us</div>
+        <h2>Ready to make your <span style="color:var(--accent)">mark?</span></h2>
+        <p>Join thousands of volunteers already making a difference across India. Your first event is just a tap away.
+        </p>
+        <div class="d-flex gap-3 justify-content-center flex-wrap">
+          <a href='/events/' class="btn-primary-k"><i class="bi bi-calendar3"></i> Find Events Near You</a>
+          <a href='/contact/' class="btn-outline-k"><i class="bi bi-building"></i> Partner With Us</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-4">
+          <div class="footer-brand"><img src="{% static 'image/weblogo.png' %}" alt="logo" width="30">Karuuna</div>
+          <div class="footer-tagline">"#Small Steps,big impact"</div>
+          <p style="color:var(--text-muted);font-size:0.88rem;max-width:280px;">Connecting compassionate volunteers with
+            verified NGOs to drive real environmental change across India.</p>
+          <div class="d-flex gap-2 mt-3">
+            <a href="#" class="social-icon"><i class="bi bi-twitter-x"></i></a>
+            <a href="#" class="social-icon"><i class="bi bi-instagram"></i></a>
+            <a href="#" class="social-icon"><i class="bi bi-linkedin"></i></a>
+            <a href="#" class="social-icon"><i class="bi bi-youtube"></i></a>
+          </div>
+        </div>
+
+
+
+      </div>
+      <hr class="footer-divider" />
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 footer-bottom">
+        <span>© 2025 Karuuna. All rights reserved.</span>
+        <span>Made with 🌱 for the planet</span>
+      </div>
+    </div>
+  </footer>
+
+  <button id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+    <i class="bi bi-arrow-up"></i> Top
+  </button>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const nav = document.getElementById('mainNav');
+    let lastY = 0;
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      nav.classList.toggle('hide', y > lastY && y > 100);
+      lastY = y;
+      document.getElementById('backToTop').classList.toggle('visible', y > 400);
+    }, { passive: true });
+
+    const revealObserver = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    const html = document.documentElement;
+    const icon = document.getElementById('themeIcon');
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      const isDark = html.getAttribute('data-theme') === 'dark';
+      html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      icon.className = isDark ? 'bi bi-sun-fill' : 'bi bi-moon-stars-fill';
+    });
+  </script>
+</body>
+
+</html>

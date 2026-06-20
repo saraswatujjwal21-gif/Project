@@ -1,0 +1,1441 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Events — Karuuna 🌱</title>
+  <link rel="icon" href="{% static 'image/weblogo.png' %}">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <link rel="stylesheet" href="{% static 'karuuna.css' %}" />
+  <style>
+    /* ── TOKENS ── */
+    :root {
+      --bg: #1a2614;
+      --primary: #4F633D;
+      --secondary: #8BA194;
+      --cream: #FFF7E2;
+      --card-bg: #243318;
+      --accent: #A8C57E;
+      --text: #FFF7E2;
+      --text-muted: #8BA194;
+      --border: rgba(139, 161, 148, 0.18);
+      --glass: rgba(36, 51, 24, 0.55);
+      --shadow: 0 8px 40px rgba(0, 0, 0, 0.45);
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+      --radius-pill: 50px;
+    }
+
+    [data-theme="light"] {
+      --bg: #f4f8f0;
+      --card-bg: #ddebd5;
+      --accent: #3a5c28;
+      --text: #1a2614;
+      --text-muted: #4F633D;
+      --border: rgba(79, 99, 61, 0.18);
+      --glass: rgba(220, 235, 208, 0.72);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      line-height: 1.6;
+      overflow-x: hidden;
+      transition: background 0.4s, color 0.4s;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+      font-family: 'Manrope', sans-serif;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+    }
+
+    ::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 10px;
+    }
+
+    /* ── PAGE TRANSITION ── */
+    #page-transition {
+      position: fixed;
+      inset: 0;
+      background: var(--accent);
+      z-index: 9999;
+      transform: translateX(-100%);
+      transition: transform 0.4s cubic-bezier(0.77, 0, 0.18, 1);
+      pointer-events: none;
+    }
+
+    #page-transition.active {
+      transform: translateX(0);
+    }
+
+    /* ── NAVBAR ── */
+    #mainNav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 1rem 0;
+      background: var(--glass);
+      backdrop-filter: blur(18px) saturate(1.4);
+      -webkit-backdrop-filter: blur(18px) saturate(1.4);
+      border-bottom: 1px solid var(--border);
+      transition: transform 0.35s ease, background 0.4s;
+    }
+
+    #mainNav.hide {
+      transform: translateY(-110%);
+    }
+
+    .navbar-brand {
+      font-family: 'Manrope', sans-serif;
+      font-weight: 900;
+      font-size: 1.45rem;
+      color: var(--accent) !important;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .nav-link {
+      color: var(--text-muted) !important;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: var(--accent) !important;
+    }
+
+    #themeToggle {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--accent);
+      border-radius: var(--radius-pill);
+      padding: 0.35rem 0.8rem;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    #themeToggle:hover {
+      background: var(--primary);
+    }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      padding: 8rem 0 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 30% 50%, rgba(168, 197, 126, 0.08) 0%, transparent 65%);
+    }
+
+    .page-header-title {
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      font-weight: 900;
+      letter-spacing: -1.5px;
+    }
+
+    .page-header-sub {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      margin-top: 0.7rem;
+      max-width: 520px;
+    }
+
+    /* ── FILTER BAR ── */
+    .filter-bar {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.2rem 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .k-input,
+    .k-select {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: var(--radius-md);
+      padding: 0.65rem 1rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .k-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .k-input:focus,
+    .k-select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(168, 197, 126, 0.15);
+    }
+
+    .k-select {
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238BA194' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      background-color: var(--card-bg);
+      padding-right: 2.5rem;
+    }
+
+    /* ── SECTION CHIP ── */
+    .section-chip {
+      display: inline-block;
+      background: rgba(168, 197, 126, 0.1);
+      color: var(--accent);
+      border: 1px solid rgba(168, 197, 126, 0.25);
+      border-radius: var(--radius-pill);
+      padding: 0.28rem 0.9rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+    }
+
+    /* ── EVENT CARDS ── */
+    .event-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    .event-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 24px 56px rgba(0, 0, 0, 0.4);
+      border-color: rgba(168, 197, 126, 0.3);
+    }
+
+    .event-thumb {
+      height: 185px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .event-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s;
+    }
+
+    .event-card:hover .event-thumb img {
+      transform: scale(1.06);
+    }
+
+    /* thumb fallback gradients */
+    .thumb-forest {
+      background: linear-gradient(135deg, #1e3a1e, #3a6b2e);
+    }
+
+    .thumb-water {
+      background: linear-gradient(135deg, #1c2f3a, #2c5a4e);
+    }
+
+    .thumb-urban {
+      background: linear-gradient(135deg, #3a2e1a, #6b5520);
+    }
+
+    .thumb-edu {
+      background: linear-gradient(135deg, #2a1a3a, #4e2c6b);
+    }
+
+    .thumb-waste {
+      background: linear-gradient(135deg, #1a3a35, #2c6b5a);
+    }
+
+    .thumb-air {
+      background: linear-gradient(135deg, #3a1a1a, #6b2c2c);
+    }
+
+    .thumb-emoji {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+    }
+
+    .badge-type {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(36, 51, 24, 0.85);
+      color: var(--accent);
+      border: 1px solid rgba(168, 197, 126, 0.3);
+      border-radius: var(--radius-pill);
+      padding: 0.22rem 0.75rem;
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      backdrop-filter: blur(8px);
+      z-index: 2;
+    }
+
+    .credits-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(168, 197, 126, 0.18);
+      border: 1px solid rgba(168, 197, 126, 0.35);
+      border-radius: var(--radius-pill);
+      padding: 0.22rem 0.7rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--accent);
+      backdrop-filter: blur(8px);
+      z-index: 2;
+    }
+
+    .almost-full-badge {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      background: rgba(237, 100, 52, 0.9);
+      color: #fff;
+      border-radius: var(--radius-pill);
+      padding: 0.22rem 0.75rem;
+      font-size: 0.7rem;
+      font-weight: 800;
+      backdrop-filter: blur(6px);
+      z-index: 2;
+      animation: pulse-badge 2s ease infinite;
+    }
+
+    @keyframes pulse-badge {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: 0.7
+      }
+    }
+
+    .event-body {
+      padding: 1.4rem;
+    }
+
+    .event-ngo {
+      color: var(--accent);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 0.3rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .event-title {
+      font-weight: 800;
+      font-size: 1.05rem;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+      line-height: 1.3;
+    }
+
+    .event-meta {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      margin-bottom: 1rem;
+    }
+
+    .event-meta span {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    /* Participant bar */
+    .participants-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.45rem;
+    }
+
+    .participants-text {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .participants-text .count {
+      color: var(--text);
+      font-weight: 800;
+    }
+
+    .pbar-wrap {
+      height: 5px;
+      background: rgba(139, 161, 148, 0.18);
+      border-radius: 99px;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+
+    .pbar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      border-radius: 99px;
+      transition: width 0.8s ease;
+    }
+
+    .pbar-fill.danger {
+      background: linear-gradient(90deg, #c0392b, #e74c3c);
+    }
+
+    /* Buttons */
+    .btn-primary-k {
+      background: var(--accent);
+      color: #1a2614;
+      border: none;
+      border-radius: var(--radius-pill);
+      font-family: 'Manrope', sans-serif;
+      font-weight: 700;
+      padding: 0.72rem 1.6rem;
+      font-size: 0.92rem;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      width: 100%;
+    }
+
+    .btn-primary-k:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(168, 197, 126, 0.4);
+    }
+
+    .btn-primary-k:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-primary-k.registered {
+      background: #48bb78;
+      color: #fff;
+    }
+
+    .btn-outline-k {
+      background: transparent;
+      color: var(--accent);
+      border: 1.5px solid var(--accent);
+      border-radius: var(--radius-pill);
+      font-family: 'Manrope', sans-serif;
+      font-weight: 700;
+      padding: 0.72rem 1.6rem;
+      font-size: 0.92rem;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, transform 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+    }
+
+    .btn-outline-k:hover {
+      background: var(--accent);
+      color: #1a2614;
+      transform: translateY(-2px);
+    }
+
+    .ripple-btn {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ripple-btn .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.28);
+      transform: scale(0);
+      animation: rippleAnim 0.55s linear;
+      pointer-events: none;
+    }
+
+    @keyframes rippleAnim {
+      to {
+        transform: scale(5);
+        opacity: 0;
+      }
+    }
+
+    /* ── MODAL OVERLAY ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 5000;
+      background: rgba(10, 18, 8, 0.8);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal-box {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      width: 100%;
+      max-width: 660px;
+      max-height: 92vh;
+      overflow-y: auto;
+      position: relative;
+      transform: translateY(28px) scale(0.97);
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-overlay.open .modal-box {
+      transform: translateY(0) scale(1);
+    }
+
+    .modal-thumb {
+      height: 220px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 24px 24px 0 0;
+      flex-shrink: 0;
+    }
+
+    .modal-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .modal-thumb-fallback {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 5rem;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: rgba(0, 0, 0, 0.5);
+      border: none;
+      color: #fff;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      transition: background 0.2s;
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-close:hover {
+      background: rgba(0, 0, 0, 0.75);
+    }
+
+    .modal-body {
+      padding: 2rem;
+      flex: 1;
+    }
+
+    .modal-category {
+      font-size: 0.73rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 0.4rem;
+    }
+
+    .modal-title {
+      font-size: 1.6rem;
+      font-weight: 900;
+      letter-spacing: -0.8px;
+      margin-bottom: 0.4rem;
+      line-height: 1.2;
+    }
+
+    .modal-ngo {
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      margin-bottom: 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .modal-info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .modal-info-item {
+      background: rgba(168, 197, 126, 0.06);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 0.85rem 1rem;
+    }
+
+    .modal-info-label {
+      font-size: 0.68rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 0.25rem;
+    }
+
+    .modal-info-value {
+      font-weight: 700;
+      font-size: 0.92rem;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .modal-desc-label {
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .modal-desc {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      line-height: 1.7;
+      margin-bottom: 1.4rem;
+    }
+
+    /* Slots bar in modal */
+    .modal-slots {
+      margin-bottom: 1.6rem;
+    }
+
+    .modal-slots-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .modal-slots-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .modal-slots-count {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .modal-slots-count .accent {
+      color: var(--accent);
+    }
+
+    .modal-slots-count .danger {
+      color: #e74c3c;
+    }
+
+    .modal-pbar-wrap {
+      height: 7px;
+      background: rgba(139, 161, 148, 0.15);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .modal-pbar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      border-radius: 99px;
+      transition: width 0.8s ease;
+    }
+
+    .modal-pbar-fill.danger {
+      background: linear-gradient(90deg, #c0392b, #e74c3c);
+    }
+
+    .modal-footer-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .modal-credits-pill {
+      background: rgba(168, 197, 126, 0.12);
+      border: 1px solid rgba(168, 197, 126, 0.25);
+      border-radius: var(--radius-pill);
+      padding: 0.5rem 1.1rem;
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .btn-confirm {
+      background: var(--accent);
+      color: #1a2614;
+      border: none;
+      border-radius: var(--radius-pill);
+      font-family: 'Manrope', sans-serif;
+      font-weight: 800;
+      padding: 0.82rem 2.2rem;
+      font-size: 1rem;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-confirm:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(168, 197, 126, 0.4);
+    }
+
+    .btn-confirm:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-confirm.confirmed {
+      background: #48bb78;
+      color: #fff;
+    }
+
+    /* ── SUCCESS TOAST ── */
+    #toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: #243318;
+      border: 1px solid rgba(72, 187, 120, 0.35);
+      color: #48bb78;
+      border-radius: var(--radius-pill);
+      padding: 0.7rem 1.5rem;
+      font-weight: 700;
+      font-size: 0.9rem;
+      z-index: 9998;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s, transform 0.35s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      white-space: nowrap;
+    }
+
+    #toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ── BACK TO TOP ── */
+    #backToTop {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 800;
+      background: var(--accent);
+      color: #1a2614;
+      border: none;
+      border-radius: var(--radius-pill);
+      padding: 0.6rem 1.2rem;
+      font-size: 0.82rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 6px 24px rgba(168, 197, 126, 0.35);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(16px);
+      transition: opacity 0.3s, transform 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    #backToTop.visible {
+      opacity: 1;
+      pointer-events: all;
+      transform: translateY(0);
+    }
+
+    #backToTop:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(168, 197, 126, 0.45);
+    }
+
+    /* ── REVEAL ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    .d-100 {
+      transition-delay: .1s
+    }
+
+    .d-200 {
+      transition-delay: .2s
+    }
+
+    .d-300 {
+      transition-delay: .3s
+    }
+
+    .d-400 {
+      transition-delay: .4s
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--card-bg);
+      border-top: 1px solid var(--border);
+      padding: 3rem 0 1.5rem;
+    }
+
+    .footer-brand {
+      font-family: 'Manrope', sans-serif;
+      font-weight: 900;
+      font-size: 1.4rem;
+      color: var(--accent);
+    }
+
+    .footer-bottom {
+      color: var(--text-muted);
+      font-size: 0.82rem;
+    }
+
+    .footer-divider {
+      border-color: var(--border);
+      margin: 1.5rem 0 1rem;
+    }
+
+    .social-icon {
+      width: 34px;
+      height: 34px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .social-icon:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    @media(max-width:768px) {
+      .modal-info-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .modal-footer-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .btn-confirm {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .filter-bar {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="page-transition"></div>
+
+  <!-- ══════════ NAVBAR ══════════ -->
+  <nav id="mainNav" class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand ripple-btn" href='/index/'>
+        <img src="{% static 'image/weblogo.png' %}" alt="logo" width="30">Karuuna
+
+      </a>
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu"
+        style="color:var(--accent)">
+        <i class="bi bi-list fs-4"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav mx-auto gap-1">
+
+        </ul>
+        <div class="d-flex align-items-center gap-3 mt-3 mt-lg-0">
+          <button id="themeToggle" title="Toggle theme">
+            <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ══════════ PAGE HEADER ══════════ -->
+  <div class="page-header">
+    <div class="container position-relative">
+      <div class="section-chip reveal">Delhi NCR</div>
+      <h1 class="page-header-title reveal d-100">Upcoming Events</h1>
+      <p class="page-header-sub reveal d-200">Find verified eco-events near you. Register, attend, and earn Green
+        Credits.</p>
+    </div>
+  </div>
+
+  <!-- ══════════ FILTER BAR ══════════ -->
+  <div class="container mb-2">
+    <div class="filter-bar reveal">
+      <input type="text" id="searchInput" class="k-input flex-grow-1"
+        placeholder="🔍  Search events, NGOs, locations…" />
+      <select id="categoryFilter" class="k-select" style="min-width:160px;">
+        <option value="">All Categories</option>
+        <option value="Tree Planting">🌲 Tree Planting</option>
+        <option value="River Cleanup">🌊 River Cleanup</option>
+        <option value="Education">📚 Education</option>
+        <option value="Urban Green">🏙️ Urban Green</option>
+        <option value="Waste Management">♻️ Waste Management</option>
+        <option value="Air Quality">💨 Air Quality</option>
+      </select>
+      <select id="locationFilter" class="k-select" style="min-width:150px;">
+        <option value="">All Locations</option>
+        <option value="Delhi">Delhi</option>
+        <option value="Gurugram">Gurugram</option>
+        <option value="Noida">Noida</option>
+        <option value="Faridabad">Faridabad</option>
+        <option value="Ghaziabad">Ghaziabad</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- ══════════ EVENTS GRID ══════════ -->
+  <section id="events" style="padding:2rem 0 6rem;">
+    <div class="container">
+      <div class="row g-4" id="eventsGrid">
+        <!-- Cards injected by JS -->
+      </div>
+      <div id="noResults" class="text-center py-5" style="display:none;">
+        <div style="font-size:3rem;margin-bottom:1rem;">🌿</div>
+        <p style="color:var(--text-muted);font-size:1.05rem;">No events match your search. Try adjusting filters.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ EVENT MODAL ══════════ -->
+  <div class="modal-overlay" id="eventModal" role="dialog" aria-modal="true">
+    <div class="modal-box" id="modalBox">
+
+      <div class="modal-thumb" id="modalThumb">
+        <button class="modal-close" id="modalClose" aria-label="Close"><i class="bi bi-x-lg"></i></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="modal-category" id="modalCategory"></div>
+        <h2 class="modal-title" id="modalTitle"></h2>
+        <div class="modal-ngo" id="modalNgo"></div>
+
+        <div class="modal-info-grid" id="modalInfoGrid"></div>
+
+        <div class="modal-desc-label">About this event</div>
+        <p class="modal-desc" id="modalDesc"></p>
+
+        <div class="modal-slots" id="modalSlots"></div>
+
+        <div class="modal-footer-row">
+          <div class="modal-credits-pill" id="modalCredits"></div>
+          <button class="btn-confirm ripple-btn" id="confirmBtn">
+            <i class="bi bi-check2-circle"></i> Confirm Registration
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ TOAST ══════════ -->
+  <div id="toast"><i class="bi bi-check-circle-fill"></i> <span id="toastMsg">Registered successfully!</span></div>
+
+  <!-- ══════════ BACK TO TOP ══════════ -->
+  <button id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+    <i class="bi bi-arrow-up"></i> Top
+  </button>
+
+  <!-- ══════════ FOOTER ══════════ -->
+  <footer>
+    <div class="container">
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+        <div class="footer-brand">Karuuna 🌱</div>
+        <div class="d-flex gap-2">
+          <a href="#" class="social-icon"><i class="bi bi-twitter-x"></i></a>
+          <a href="#" class="social-icon"><i class="bi bi-instagram"></i></a>
+          <a href="#" class="social-icon"><i class="bi bi-linkedin"></i></a>
+        </div>
+      </div>
+      <hr class="footer-divider" />
+      <div class="footer-bottom">© 2026 Karuuna. Made with 💚 for a greener Bharat</div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    /* ═══════════════════════════════════════════
+       DATA
+    ═══════════════════════════════════════════ */
+    // prettier-ignore
+    const EVENTS = [
+      {% for ev in events %}
+    {
+      id: parseInt("{{ ev.id|default:0 }}", 10),
+        title: "{{ ev.Event_title|escapejs }}",
+          ngo: "{{ ev.ngo.organization_name|default:ev.ngo.Full_name|default:'Green Earth Foundation'|escapejs }}",
+            ngo_id: parseInt("{{ ev.ngo.id|default:0 }}", 10),
+              category: "{{ ev.Event_type|escapejs }}",
+                location: "{{ ev.location|escapejs }}",
+                  city: "{{ ev.location|escapejs }}",
+                    date: "{{ ev.Event_date|escapejs }}",
+                      time: "{{ ev.Start_time|escapejs }}",
+                        credits: parseInt("{{ ev.Green_credits|default:30 }}", 10),
+                          joined: 0,
+                            total: parseInt("{{ ev.max_participants|default:50 }}", 10),
+                              imgUrl: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=700&q=80",
+                                thumbClass: "thumb-forest",
+                                  description: "{{ ev.Event_description|escapejs }}",
+      },
+    {% endfor %}
+    ];
+
+    /* ═══════════════════════════════════════════
+       STATE
+    ═══════════════════════════════════════════ */
+    // Registered set (persists in-session)
+    const registered = new Set({{ registered_event_ids| safe }});
+    const isVolunteer = "{{ is_volunteer_logged_in }}" === "True";
+    // Live joined counts (mutable)
+    const joinedCounts = {};
+    EVENTS.forEach(e => { joinedCounts[e.id] = e.joined; });
+
+    let activeEventId = null;
+
+    /* ═══════════════════════════════════════════
+       RENDER CARDS
+    ═══════════════════════════════════════════ */
+    function renderCards(list) {
+      const grid = document.getElementById('eventsGrid');
+      const noRes = document.getElementById('noResults');
+      grid.innerHTML = '';
+      if (!list.length) { noRes.style.display = ''; return; }
+      noRes.style.display = 'none';
+
+      list.forEach((ev, idx) => {
+        const joined = joinedCounts[ev.id];
+        const pct = Math.round((joined / ev.total) * 100);
+        const almostFull = pct >= 70 && pct < 100;
+        const full = joined >= ev.total;
+        const isReg = registered.has(ev.id);
+
+        const delayClass = ['', 'd-100', 'd-200', 'd-300'][idx % 4];
+
+        const col = document.createElement('div');
+        col.className = `col-md-6 col-lg-4 reveal ${delayClass}`;
+        col.innerHTML = `
+      <div class="event-card" onclick="openModal(${ev.id})">
+        <div class="event-thumb">
+          <img src="${ev.imgUrl}" alt="${ev.title}" loading="lazy"
+               onerror="this.parentNode.innerHTML='<div class=\\'${ev.thumbClass} thumb-emoji\\'>🌿</div>'"/>
+          <span class="badge-type">${ev.category}</span>
+          <span class="credits-badge">+${ev.credits} 🌱</span>
+          ${almostFull ? '<span class="almost-full-badge">🔥 Almost Full</span>' : ''}
+          ${full ? '<span class="almost-full-badge" style="background:rgba(150,50,50,0.9)">🔒 Full</span>' : ''}
+        </div>
+        <div class="event-body">
+          <div class="event-ngo"><i class="bi bi-building"></i> ${ev.ngo}</div>
+          <div class="event-title">${ev.title}</div>
+          <div class="event-meta">
+            <span><i class="bi bi-geo-alt-fill" style="color:var(--accent)"></i> ${ev.location}</span>
+            <span><i class="bi bi-calendar3" style="color:var(--accent)"></i> ${ev.date} &nbsp;·&nbsp; ${ev.time}</span>
+          </div>
+          <div class="participants-row">
+            <span class="participants-text"><span class="count">${joined}</span>/${ev.total} joined</span>
+            <span class="participants-text">${ev.total - joined} slot${ev.total - joined !== 1 ? 's' : ''} left</span>
+          </div>
+          <div class="pbar-wrap">
+            <div class="pbar-fill ${pct >= 70 ? 'danger' : ''}" style="width:${pct}%"></div>
+          </div>
+          <button class="btn-primary-k ripple-btn ${isReg ? 'registered' : ''}"
+                  onclick="event.stopPropagation(); openModal(${ev.id})"
+                  ${full && !isReg ? 'disabled' : ''}>
+            ${isReg
+            ? '<i class="bi bi-check2-circle"></i> ✅ Registered'
+            : full
+              ? '<i class="bi bi-lock"></i> Event Full'
+              : '<i class="bi bi-check2-circle"></i> Register Now'}
+          </button>
+        </div>
+      </div>`;
+        grid.appendChild(col);
+      });
+
+      // re-observe reveal
+      grid.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+    }
+
+    /* ═══════════════════════════════════════════
+       MODAL
+    ═══════════════════════════════════════════ */
+    function openModal(id) {
+      const ev = EVENTS.find(e => e.id === id);
+      if (!ev) return;
+      activeEventId = id;
+      const joined = joinedCounts[id];
+      const pct = Math.round((joined / ev.total) * 100);
+      const isReg = registered.has(id);
+      const full = joined >= ev.total;
+
+      // Thumb
+      const thumb = document.getElementById('modalThumb');
+      // keep close btn
+      const closeBtn = document.getElementById('modalClose');
+      thumb.innerHTML = `
+    <img src="${ev.imgUrl}" alt="${ev.title}"
+         onerror="this.outerHTML='<div class=\\'modal-thumb-fallback ${ev.thumbClass}\\'>🌿</div>'"/>`;
+      thumb.appendChild(closeBtn);
+
+      document.getElementById('modalCategory').textContent = ev.category;
+      document.getElementById('modalTitle').textContent = ev.title;
+      document.getElementById('modalNgo').innerHTML = `<i class="bi bi-building me-1"></i>${ev.ngo}`;
+      document.getElementById('modalDesc').textContent = ev.description;
+
+      // Info grid
+      document.getElementById('modalInfoGrid').innerHTML = `
+    <div class="modal-info-item">
+      <div class="modal-info-label">📅 Date</div>
+      <div class="modal-info-value">${ev.date}</div>
+    </div>
+    <div class="modal-info-item">
+      <div class="modal-info-label">⏰ Time</div>
+      <div class="modal-info-value">${ev.time}</div>
+    </div>
+    <div class="modal-info-item">
+      <div class="modal-info-label">📍 Location</div>
+      <div class="modal-info-value">${ev.location}</div>
+    </div>
+    <div class="modal-info-item">
+      <div class="modal-info-label">🏢 Organiser</div>
+      <div class="modal-info-value">${ev.ngo}</div>
+    </div>`;
+
+      // Slots
+      const slotsLeft = ev.total - joined;
+      document.getElementById('modalSlots').innerHTML = `
+    <div class="modal-slots-header">
+      <span class="modal-slots-label">Participants</span>
+      <span class="modal-slots-count">
+        <span class="${pct >= 70 ? 'danger' : 'accent'}">${joined}</span> / ${ev.total} &nbsp;·&nbsp;
+        <span class="${pct >= 70 ? 'danger' : 'accent'}">${slotsLeft}</span> slot${slotsLeft !== 1 ? 's' : ''} remaining
+      </span>
+    </div>
+    <div class="modal-pbar-wrap">
+      <div class="modal-pbar-fill ${pct >= 70 ? 'danger' : ''}" style="width:${pct}%"></div>
+    </div>`;
+
+      document.getElementById('modalCredits').innerHTML = `<i class="bi bi-coin"></i> +${ev.credits} Green Credits`;
+
+      // Confirm button state
+      const btn = document.getElementById('confirmBtn');
+      if (isReg) {
+        btn.innerHTML = '<i class="bi bi-check2-circle"></i> ✅ Already Registered';
+        btn.classList.add('confirmed');
+        btn.disabled = true;
+      } else if (full) {
+        btn.innerHTML = '<i class="bi bi-lock"></i> Event Full';
+        btn.classList.remove('confirmed');
+        btn.disabled = true;
+      } else {
+        btn.innerHTML = '<i class="bi bi-check2-circle"></i> Confirm Registration';
+        btn.classList.remove('confirmed');
+        btn.disabled = false;
+      }
+
+      document.getElementById('eventModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      document.getElementById('eventModal').classList.remove('open');
+      document.body.style.overflow = '';
+      activeEventId = null;
+    }
+
+    document.getElementById('modalClose').addEventListener('click', closeModal);
+    document.getElementById('eventModal').addEventListener('click', function (e) {
+      if (e.target === this) closeModal();
+    });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+    /* ═══════════════════════════════════════════
+       CONFIRM REGISTRATION
+    ═══════════════════════════════════════════ */
+    document.getElementById('confirmBtn').addEventListener('click', async function () {
+      if (!isVolunteer) {
+        window.location.href = '/login/';
+        return;
+      }
+      if (!activeEventId || registered.has(activeEventId)) return;
+      const ev = EVENTS.find(e => e.id === activeEventId);
+      if (!ev || joinedCounts[activeEventId] >= ev.total) return;
+
+      const btn = this;
+      btn.innerHTML = '<i class="bi bi-hourglass"></i> Registering...';
+      btn.disabled = true;
+
+      try {
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        const res = await fetch('/register_event/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken
+          },
+          body: JSON.stringify({ event_id: activeEventId })
+        });
+        const data = await res.json();
+
+        if (data.status !== 'success') {
+          alert('Error: ' + data.message);
+          btn.innerHTML = '<i class="bi bi-check2-circle"></i> Confirm Registration';
+          btn.disabled = false;
+          return;
+        }
+
+        // Register locally after success
+        registered.add(activeEventId);
+        joinedCounts[activeEventId]++;
+
+        // Update button in modal
+        btn.innerHTML = '<i class="bi bi-check2-circle"></i> ✅ Registered!';
+        btn.classList.add('confirmed');
+        btn.disabled = true;
+
+        // Update slots display
+        const joined = joinedCounts[activeEventId];
+        const pct = Math.round((joined / ev.total) * 100);
+        const slotsLeft = ev.total - joined;
+        document.getElementById('modalSlots').innerHTML = `
+      <div class="modal-slots-header">
+        <span class="modal-slots-label">Participants</span>
+        <span class="modal-slots-count">
+          <span class="${pct >= 70 ? 'danger' : 'accent'}">${joined}</span> / ${ev.total} &nbsp;·&nbsp;
+          <span class="${pct >= 70 ? 'danger' : 'accent'}">${slotsLeft}</span> slot${slotsLeft !== 1 ? 's' : ''} remaining
+        </span>
+      </div>
+      <div class="modal-pbar-wrap">
+        <div class="modal-pbar-fill ${pct >= 70 ? 'danger' : ''}" style="width:${pct}%"></div>
+      </div>`;
+
+        // Show toast
+        showToast(`✅ Registered for "${ev.title}"!`);
+
+        // Re-render cards
+        setTimeout(() => {
+          renderCards(currentList());
+          closeModal();
+        }, 900);
+      } catch (err) {
+        console.error(err);
+        btn.innerHTML = '<i class="bi bi-check2-circle"></i> Confirm Registration';
+        btn.disabled = false;
+      }
+    });
+
+    /* ═══════════════════════════════════════════
+       TOAST
+    ═══════════════════════════════════════════ */
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      document.getElementById('toastMsg').textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3200);
+    }
+
+    /* ═══════════════════════════════════════════
+       FILTERS
+    ═══════════════════════════════════════════ */
+    function currentList() {
+      const q = document.getElementById('searchInput').value.toLowerCase();
+      const cat = document.getElementById('categoryFilter').value;
+      const loc = document.getElementById('locationFilter').value;
+      return EVENTS.filter(ev =>
+        (!q || ev.title.toLowerCase().includes(q) || ev.ngo.toLowerCase().includes(q) || ev.location.toLowerCase().includes(q)) &&
+        (!cat || ev.category === cat) &&
+        (!loc || ev.city === loc)
+      );
+    }
+
+    ['searchInput', 'categoryFilter', 'locationFilter'].forEach(id => {
+      document.getElementById(id).addEventListener('input', () => renderCards(currentList()));
+      document.getElementById(id).addEventListener('change', () => renderCards(currentList()));
+    });
+
+    /* ═══════════════════════════════════════════
+       SCROLL / REVEAL / MISC
+    ═══════════════════════════════════════════ */
+    const nav = document.getElementById('mainNav');
+    let lastY = 0;
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      nav.classList.toggle('hide', y > lastY && y > 100);
+      lastY = y;
+      document.getElementById('backToTop').classList.toggle('visible', y > 400);
+    }, { passive: true });
+
+    const revealObserver = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    const html = document.documentElement;
+    const icon = document.getElementById('themeIcon');
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      const isDark = html.getAttribute('data-theme') === 'dark';
+      html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      icon.className = isDark ? 'bi bi-sun-fill' : 'bi bi-moon-stars-fill';
+    });
+
+    document.addEventListener('click', e => {
+      const btn = e.target.closest('.ripple-btn');
+      if (!btn) return;
+      const r = document.createElement('span');
+      r.className = 'ripple';
+      const rect = btn.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height);
+      r.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX - rect.left - size / 2}px;top:${e.clientY - rect.top - size / 2}px`;
+      btn.appendChild(r);
+      r.addEventListener('animationend', () => r.remove());
+    });
+
+    /* ═══════════════════════════════════════════
+       INIT
+    ═══════════════════════════════════════════ */
+    renderCards(EVENTS);
+  </script>
+  {% csrf_token %}
+</body>
+
+</html>

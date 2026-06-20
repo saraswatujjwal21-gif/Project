@@ -1,0 +1,776 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy — Karuuna 🌱</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <style>
+    :root {
+      --bg: #1a2614;
+      --primary: #4F633D;
+      --secondary: #8BA194;
+      --cream: #FFF7E2;
+      --card-bg: #243318;
+      --accent: #A8C57E;
+      --text: #FFF7E2;
+      --text-muted: #8BA194;
+      --border: rgba(139, 161, 148, 0.18);
+      --glass: rgba(36, 51, 24, 0.55);
+      --shadow: 0 8px 40px rgba(0, 0, 0, 0.45);
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+      --radius-pill: 50px;
+    }
+
+    [data-theme="light"] {
+      --bg: #f4f8f0;
+      --card-bg: #ddebd5;
+      --accent: #3a5c28;
+      --text: #1a2614;
+      --text-muted: #4F633D;
+      --border: rgba(79, 99, 61, 0.18);
+      --glass: rgba(220, 235, 208, 0.72);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      line-height: 1.6;
+      overflow-x: hidden;
+      transition: background 0.4s, color 0.4s;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+      font-family: 'Manrope', sans-serif;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+    }
+
+    ::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 10px;
+    }
+
+    /* NAVBAR */
+    #mainNav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 1rem 0;
+      background: var(--glass);
+      backdrop-filter: blur(18px) saturate(1.4);
+      -webkit-backdrop-filter: blur(18px) saturate(1.4);
+      border-bottom: 1px solid var(--border);
+      transition: transform 0.35s ease, background 0.4s;
+    }
+
+    #mainNav.hide {
+      transform: translateY(-110%);
+    }
+
+    .navbar-brand {
+      font-family: 'Manrope', sans-serif;
+      font-weight: 900;
+      font-size: 1.45rem;
+      color: var(--accent) !important;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .nav-link {
+      color: var(--text-muted) !important;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: var(--accent) !important;
+    }
+
+    #themeToggle {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--accent);
+      border-radius: var(--radius-pill);
+      padding: 0.35rem 0.8rem;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    #themeToggle:hover {
+      background: var(--primary);
+    }
+
+    /* PAGE HEADER */
+    .page-header {
+      padding: 8rem 0 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 30% 50%, rgba(168, 197, 126, 0.08) 0%, transparent 65%);
+    }
+
+    .page-header-title {
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      font-weight: 900;
+      letter-spacing: -1.5px;
+    }
+
+    .page-header-sub {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      margin-top: 0.7rem;
+      max-width: 520px;
+    }
+
+    /* SECTION CHIP */
+    .section-chip {
+      display: inline-block;
+      background: rgba(168, 197, 126, 0.1);
+      color: var(--accent);
+      border: 1px solid rgba(168, 197, 126, 0.25);
+      border-radius: var(--radius-pill);
+      padding: 0.28rem 0.9rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+    }
+
+    /* LAYOUT */
+    .privacy-layout {
+      padding: 4rem 0 6rem;
+    }
+
+    /* SIDEBAR TOC */
+    .toc-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      position: sticky;
+      top: 90px;
+    }
+
+    .toc-card h6 {
+      font-weight: 800;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    .toc-link {
+      display: block;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      padding: 0.45rem 0.75rem;
+      border-radius: var(--radius-sm);
+      transition: background 0.2s, color 0.2s;
+      margin-bottom: 0.2rem;
+    }
+
+    .toc-link:hover,
+    .toc-link.active {
+      background: rgba(168, 197, 126, 0.1);
+      color: var(--accent);
+    }
+
+    .toc-link i {
+      margin-right: 0.4rem;
+      font-size: 0.8rem;
+    }
+
+    /* CONTENT SECTIONS */
+    .privacy-section {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2.2rem;
+      margin-bottom: 1.5rem;
+      scroll-margin-top: 90px;
+    }
+
+    .privacy-section h3 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .privacy-section h3 .sec-icon {
+      width: 38px;
+      height: 38px;
+      background: rgba(168, 197, 126, 0.1);
+      border: 1px solid rgba(168, 197, 126, 0.2);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .privacy-section p {
+      color: var(--text-muted);
+      font-size: 0.93rem;
+      line-height: 1.75;
+      margin-bottom: 1rem;
+    }
+
+    .privacy-section p:last-child {
+      margin-bottom: 0;
+    }
+
+    .privacy-section ul {
+      color: var(--text-muted);
+      font-size: 0.93rem;
+      line-height: 1.75;
+      padding-left: 1.2rem;
+      margin-bottom: 1rem;
+    }
+
+    .privacy-section ul li {
+      margin-bottom: 0.5rem;
+    }
+
+    .privacy-section ul li::marker {
+      color: var(--accent);
+    }
+
+    .privacy-section strong {
+      color: var(--text);
+    }
+
+    /* HIGHLIGHT BOX */
+    .highlight-box {
+      background: rgba(168, 197, 126, 0.07);
+      border: 1px solid rgba(168, 197, 126, 0.2);
+      border-left: 3px solid var(--accent);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.2rem;
+      margin: 1rem 0;
+    }
+
+    .highlight-box p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin: 0;
+    }
+
+    .highlight-box strong {
+      color: var(--accent);
+    }
+
+    /* META BAR */
+    .meta-bar {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.2rem 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      align-items: center;
+      margin-bottom: 2rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .meta-bar span {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .meta-bar strong {
+      color: var(--accent);
+    }
+
+    /* REVEAL */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    .d-100 {
+      transition-delay: .1s
+    }
+
+    .d-200 {
+      transition-delay: .2s
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--card-bg);
+      border-top: 1px solid var(--border);
+      padding: 3rem 0 1.5rem;
+    }
+
+    .footer-brand {
+      font-family: 'Manrope', sans-serif;
+      font-weight: 900;
+      font-size: 1.4rem;
+      color: var(--accent);
+    }
+
+    .footer-bottom {
+      color: var(--text-muted);
+      font-size: 0.82rem;
+    }
+
+    .footer-divider {
+      border-color: var(--border);
+      margin: 1.5rem 0 1rem;
+    }
+
+    .social-icon {
+      width: 34px;
+      height: 34px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .social-icon:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* BACK TO TOP */
+    #backToTop {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 800;
+      background: var(--accent);
+      color: #1a2614;
+      border: none;
+      border-radius: var(--radius-pill);
+      padding: 0.6rem 1.2rem;
+      font-size: 0.82rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 6px 24px rgba(168, 197, 126, 0.35);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(16px);
+      transition: opacity 0.3s, transform 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    #backToTop.visible {
+      opacity: 1;
+      pointer-events: all;
+      transform: translateY(0);
+    }
+
+    #backToTop:hover {
+      transform: translateY(-3px);
+    }
+
+    @media(max-width:991px) {
+      .toc-card {
+        position: static;
+        margin-bottom: 2rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav id="mainNav" class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href="/index/"><img src="{% static 'image/weblogo.png' %}" alt="logo" width="30">Karuuna</a>
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu"
+        style="color:var(--accent)">
+        <i class="bi bi-list fs-4"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+
+        <div class="d-flex align-items-center gap-3 mt-3 mt-lg-0">
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div class="container position-relative">
+      <div class="section-chip reveal">Legal</div>
+      <h1 class="page-header-title reveal d-100">Privacy Policy</h1>
+      <p class="page-header-sub reveal d-200">We believe privacy is a fundamental right. Here's exactly how Karuuna
+        collects, uses, and protects your information.</p>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="privacy-layout">
+    <div class="container">
+
+      <!-- META BAR -->
+      <div class="meta-bar reveal">
+        <span><i class="bi bi-calendar3"></i> Last updated: <strong>1 June 2025</strong></span>
+        <span><i class="bi bi-translate"></i> Available in: <strong>English, Hindi</strong></span>
+        <span><i class="bi bi-envelope"></i> Questions? <a href="mailto:privacy@karuuna.in"
+            style="color:var(--accent);">privacy@karuuna.in</a></span>
+      </div>
+
+      <div class="row g-4">
+
+        <!-- SIDEBAR -->
+        <div class="col-lg-3 reveal">
+          <div class="toc-card">
+            <h6><i class="bi bi-list-ul me-1"></i> Contents</h6>
+            <a href="#overview" class="toc-link"><i class="bi bi-circle-fill"></i> Overview</a>
+            <a href="#data-collect" class="toc-link"><i class="bi bi-circle-fill"></i> Data We Collect</a>
+            <a href="#how-use" class="toc-link"><i class="bi bi-circle-fill"></i> How We Use It</a>
+            <a href="#sharing" class="toc-link"><i class="bi bi-circle-fill"></i> Sharing & Disclosure</a>
+            <a href="#cookies" class="toc-link"><i class="bi bi-circle-fill"></i> Cookies</a>
+            <a href="#retention" class="toc-link"><i class="bi bi-circle-fill"></i> Data Retention</a>
+            <a href="#rights" class="toc-link"><i class="bi bi-circle-fill"></i> Your Rights</a>
+            <a href="#security" class="toc-link"><i class="bi bi-circle-fill"></i> Security</a>
+            <a href="#children" class="toc-link"><i class="bi bi-circle-fill"></i> Children</a>
+            <a href="#changes" class="toc-link"><i class="bi bi-circle-fill"></i> Policy Changes</a>
+            <a href="#contact-privacy" class="toc-link"><i class="bi bi-circle-fill"></i> Contact</a>
+          </div>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="col-lg-9">
+
+          <div class="privacy-section reveal" id="overview">
+            <h3><span class="sec-icon">🌱</span> Overview</h3>
+            <p>Karuuna Technologies Private Limited ("Karuuna", "we", "us", or "our") operates the Karuuna platform,
+              which connects volunteers with verified NGOs for environmental events across India. This Privacy Policy
+              explains how we handle your personal information when you use our website, mobile app, or any related
+              services.</p>
+            <div class="highlight-box">
+              <p><strong>Our promise:</strong> We collect only what we need, we never sell your data, and we give you
+                full control over your information. Your trust is the foundation of everything we build.</p>
+            </div>
+            <p>By using Karuuna, you agree to the practices described in this policy. If you have questions at any
+              point, our privacy team is reachable at <a href="mailto:privacy@karuuna.in"
+                style="color:var(--accent);">privacy@karuuna.in</a>.</p>
+          </div>
+
+          <div class="privacy-section reveal" id="data-collect">
+            <h3><span class="sec-icon">📋</span> Data We Collect</h3>
+            <p>We collect information in three ways — what you give us directly, what is generated through your use of
+              the platform, and (in limited cases) what we receive from third parties.</p>
+            <p><strong>Information you provide:</strong></p>
+            <ul>
+              <li><strong>Account details</strong> — name, email address, mobile number, city, and profile photo when
+                you register.</li>
+              <li><strong>Event registrations</strong> — your event attendance records and any dietary or accessibility
+                preferences you share with us.</li>
+              <li><strong>Communication</strong> — messages you send to our support team or NGO partners via the
+                platform.</li>
+              <li><strong>Feedback</strong> — survey responses, ratings, and post-event reviews.</li>
+            </ul>
+            <p><strong>Information generated automatically:</strong></p>
+            <ul>
+              <li><strong>Usage data</strong> — pages visited, features used, search queries, and session duration.</li>
+              <li><strong>Device data</strong> — browser type, operating system, IP address, and device identifiers.
+              </li>
+              <li><strong>Location</strong> — approximate city-level location inferred from your IP address (we do not
+                access GPS without explicit permission).</li>
+              <li><strong>Green Credits ledger</strong> — a record of events attended and credits earned.</li>
+            </ul>
+            <p><strong>Information from third parties:</strong></p>
+            <ul>
+              <li>If you sign in via Google or other OAuth providers, we receive your name and email as shared by that
+                provider.</li>
+              <li>NGO partners may confirm your attendance at events, which is recorded in your profile.</li>
+            </ul>
+          </div>
+
+          <div class="privacy-section reveal" id="how-use">
+            <h3><span class="sec-icon">⚙️</span> How We Use Your Information</h3>
+            <p>We use your data for clearly defined purposes. We never use it in ways you wouldn't reasonably expect.
+            </p>
+            <ul>
+              <li><strong>Providing the service</strong> — creating your account, registering you for events, issuing
+                Green Credits, and personalising your event feed.</li>
+              <li><strong>Communication</strong> — sending event reminders, registration confirmations, and important
+                platform updates.</li>
+              <li><strong>Safety & verification</strong> — confirming volunteer identities to ensure a safe environment
+                at events.</li>
+              <li><strong>Improving Karuuna</strong> — analysing aggregated, anonymised usage patterns to improve
+                features and fix bugs.</li>
+              <li><strong>Legal compliance</strong> — meeting our obligations under applicable Indian law, including the
+                Digital Personal Data Protection Act, 2023.</li>
+            </ul>
+            <div class="highlight-box">
+              <p><strong>We never use your data for:</strong> targeted advertising, profiling for political purposes, or
+                sharing with data brokers.</p>
+            </div>
+          </div>
+
+          <div class="privacy-section reveal" id="sharing">
+            <h3><span class="sec-icon">🤝</span> Sharing & Disclosure</h3>
+            <p>We do not sell, trade, or rent your personal information to anyone. We share data only in these limited
+              circumstances:</p>
+            <ul>
+              <li><strong>NGO partners</strong> — when you register for an event, your name and contact details are
+                shared with the organising NGO for attendance management. These partners are contractually bound to use
+                your data only for this purpose.</li>
+              <li><strong>Service providers</strong> — we use trusted third-party services (cloud hosting, email
+                delivery, analytics) who process data solely on our behalf under strict data processing agreements.</li>
+              <li><strong>Legal obligations</strong> — we may disclose information if required by law, court order, or
+                government authority.</li>
+              <li><strong>Business transfers</strong> — in the event of a merger or acquisition, your data may be
+                transferred. We will notify you and you will have the option to delete your account before any transfer
+                occurs.</li>
+              <li><strong>With your consent</strong> — for any other purpose, we will ask you explicitly before sharing.
+              </li>
+            </ul>
+          </div>
+
+          <div class="privacy-section reveal" id="cookies">
+            <h3><span class="sec-icon">🍪</span> Cookies & Tracking</h3>
+            <p>We use cookies and similar technologies to keep you signed in, remember your preferences (like dark
+              mode), and understand how the platform is used.</p>
+            <ul>
+              <li><strong>Essential cookies</strong> — required for the platform to function. Cannot be disabled.</li>
+              <li><strong>Preference cookies</strong> — remember your theme, language, and filter selections.</li>
+              <li><strong>Analytics cookies</strong> — help us understand which features are most useful (using
+                privacy-respecting, cookieless analytics where possible).</li>
+            </ul>
+            <p>You can manage cookie preferences through your browser settings. Disabling non-essential cookies will not
+              affect your ability to use Karuuna.</p>
+          </div>
+
+          <div class="privacy-section reveal" id="retention">
+            <h3><span class="sec-icon">🗓️</span> Data Retention</h3>
+            <p>We retain your personal data only as long as necessary for the purposes outlined in this policy.</p>
+            <ul>
+              <li><strong>Active accounts</strong> — retained for the duration of your account plus 90 days after
+                deletion.</li>
+              <li><strong>Event records</strong> — attendance logs are retained for up to 3 years for legal and audit
+                purposes, then permanently deleted.</li>
+              <li><strong>Anonymised analytics</strong> — may be retained indefinitely as they contain no personal
+                identifiers.</li>
+            </ul>
+            <p>You can request deletion of your account and associated data at any time. See <a href="#rights"
+                style="color:var(--accent);">Your Rights</a> below.</p>
+          </div>
+
+          <div class="privacy-section reveal" id="rights">
+            <h3><span class="sec-icon">⚖️</span> Your Rights</h3>
+            <p>Under India's Digital Personal Data Protection Act, 2023, and applicable regulations, you have the
+              following rights:</p>
+            <ul>
+              <li><strong>Right to Access</strong> — request a copy of the personal data we hold about you.</li>
+              <li><strong>Right to Correction</strong> — request correction of inaccurate or incomplete data.</li>
+              <li><strong>Right to Erasure</strong> — request deletion of your account and personal data, subject to
+                legal retention obligations.</li>
+              <li><strong>Right to Withdraw Consent</strong> — withdraw consent for optional processing at any time,
+                without affecting prior lawful processing.</li>
+              <li><strong>Right to Grievance Redressal</strong> — raise a complaint with our Data Protection Officer or
+                the Data Protection Board of India.</li>
+            </ul>
+            <div class="highlight-box">
+              <p>To exercise any right, email <strong>privacy@karuuna.in</strong> with your registered email address. We
+                will respond within <strong>15 business days</strong> as required by law.</p>
+            </div>
+          </div>
+
+          <div class="privacy-section reveal" id="security">
+            <h3><span class="sec-icon">🔒</span> Security</h3>
+            <p>We implement industry-standard security measures to protect your data:</p>
+            <ul>
+              <li>All data in transit is encrypted using TLS 1.2 or higher.</li>
+              <li>Passwords are hashed using bcrypt with a minimum cost factor of 12.</li>
+              <li>Access to production databases is restricted to authorised personnel via multi-factor authentication.
+              </li>
+              <li>We conduct regular security audits and penetration testing.</li>
+              <li>Our infrastructure is hosted on ISO 27001-certified cloud providers.</li>
+            </ul>
+            <p>No system is completely infallible. In the event of a data breach affecting your rights, we will notify
+              you within 72 hours of becoming aware of it, as required by law.</p>
+          </div>
+
+          <div class="privacy-section reveal" id="children">
+            <h3><span class="sec-icon">👶</span> Children's Privacy</h3>
+            <p>Karuuna is not intended for individuals under the age of 18. We do not knowingly collect personal data
+              from anyone under 18.</p>
+            <p>If you are a parent or guardian and believe your child has provided us with personal information, please
+              contact us at <a href="mailto:privacy@karuuna.in" style="color:var(--accent);">privacy@karuuna.in</a> and
+              we will delete the information promptly.</p>
+          </div>
+
+          <div class="privacy-section reveal" id="changes">
+            <h3><span class="sec-icon">📣</span> Changes to This Policy</h3>
+            <p>We may update this Privacy Policy from time to time to reflect changes in our practices, technology, or
+              legal requirements. When we make material changes, we will:</p>
+            <ul>
+              <li>Update the "Last updated" date at the top of this page.</li>
+              <li>Send an in-app notification and email to all registered users at least 14 days before the change takes
+                effect.</li>
+              <li>Maintain an archive of previous policy versions on this page.</li>
+            </ul>
+            <p>Continued use of Karuuna after the effective date of changes constitutes acceptance of the updated
+              policy.</p>
+          </div>
+
+          <div class="privacy-section reveal" id="contact-privacy">
+            <h3><span class="sec-icon">📬</span> Contact Our Privacy Team</h3>
+            <p>Our Data Protection Officer (DPO) is available to answer any questions about this policy or our data
+              practices.</p>
+            <ul>
+              <li><strong>Email:</strong> <a href="mailto:privacy@karuuna.in"
+                  style="color:var(--accent);">privacy@karuuna.in</a></li>
+              <li><strong>Postal address:</strong> Karuuna Technologies Pvt. Ltd., 4th Floor, DLF Cyber City, Gurugram,
+                Haryana 122002</li>
+              <li><strong>Response time:</strong> Within 15 business days</li>
+            </ul>
+            <p>If you are not satisfied with our response, you have the right to lodge a complaint with the <strong>Data
+                Protection Board of India</strong> at <a href="https://dpboard.gov.in" style="color:var(--accent);"
+                target="_blank">dpboard.gov.in</a>.</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-4">
+          <div class="footer-brand mb-2"><img src="{% static 'image/weblogo.png' %}" alt="logo" width="30">Karuuna</div>
+          <p style="color:var(--text-muted);font-size:0.88rem;max-width:280px;">Connecting compassionate volunteers with
+            verified NGOs to drive real environmental change across India.</p>
+          <div class="d-flex gap-2 mt-3">
+            <a href="#" class="social-icon"><i class="bi bi-twitter-x"></i></a>
+            <a href="#" class="social-icon"><i class="bi bi-instagram"></i></a>
+            <a href="#" class="social-icon"><i class="bi bi-linkedin"></i></a>
+          </div>
+        </div>
+
+        <hr class="footer-divider" />
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 footer-bottom">
+          <span>© 2025 Karuuna Technologies Pvt. Ltd. All rights reserved.</span>
+          <span>Made with 🌱 for the planet</span>
+        </div>
+      </div>
+  </footer>
+
+  <button id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+    <i class="bi bi-arrow-up"></i> Top
+  </button>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const nav = document.getElementById('mainNav');
+    let lastY = 0;
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      nav.classList.toggle('hide', y > lastY && y > 100);
+      lastY = y;
+      document.getElementById('backToTop').classList.toggle('visible', y > 400);
+    }, { passive: true });
+
+    const revealObserver = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    const html = document.documentElement;
+    const icon = document.getElementById('themeIcon');
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      const isDark = html.getAttribute('data-theme') === 'dark';
+      html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      icon.className = isDark ? 'bi bi-sun-fill' : 'bi bi-moon-stars-fill';
+    });
+
+    // Highlight active TOC link on scroll
+    const sections = document.querySelectorAll('.privacy-section');
+    const tocLinks = document.querySelectorAll('.toc-link');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          tocLinks.forEach(l => l.classList.remove('active'));
+          const link = document.querySelector(`.toc-link[href="#${e.target.id}"]`);
+          if (link) link.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-30% 0px -60% 0px' });
+    sections.forEach(s => observer.observe(s));
+  </script>
+</body>
+
+</html>

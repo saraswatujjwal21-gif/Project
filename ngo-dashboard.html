@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NGO Home — Karuuna </title>
+  <link rel="icon" href="{% static 'image/weblogo.png' %}">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <link rel="stylesheet" href="{% static 'karuuna.css' %}" />
+</head>
+
+<body>
+
+  <div id="page-transition"></div>
+
+  <!-- NAVBAR -->
+  <nav id="mainNav" class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href='/index/'><img src="{% static 'image/weblogo.png' %}" alt="logo" width="30">Karuuna
+      </a>
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu"
+        style="color:var(--accent)">
+        <i class="bi bi-lsist fs-4"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav ms-auto gap-2 align-items-lg-center">
+          <li class="nav-item"><a class="nav-link" href='/events/'>Browse Events</a></li>
+          <li class="nav-item"><a class="nav-link" href='/blog/'>Blog</a></li>
+        </ul>
+
+        <div class="d-flex align-items-center gap-2" style="cursor:pointer">
+          <div class="k-avatar" style="background:linear-gradient(135deg,#1c4a1c,#3a8c2e)">🏢</div>
+          <div style="line-height:1.2">
+            <div style="font-weight:700;font-size:0.9rem">
+              {{ ngo.organization_name|default:ngo.Full_name|default:"Green Earth Foundation" }}
+            </div>
+            <div style="color:var(--text-muted);font-size:0.75rem">NGO Account</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </nav>
+
+  <main style="padding-top:5rem;padding-bottom:4rem">
+    <div class="container">
+
+      <!-- Welcome -->
+      <div class="row align-items-center g-3 mb-4 reveal visible" style="margin-top:2rem">
+        <div class="col">
+          <h1 style="font-size:clamp(1.6rem,3vw,2.2rem);font-weight:900;letter-spacing:-0.8px">
+            🏢 {{ ngo.organization_name|default:ngo.Full_name|default:"Green Earth Foundation" }}
+          </h1>
+          <p style="color:var(--text-muted);margin:0">Verified NGO · {{ ngo.city|default:"Gurugram, Haryana" }}</p>
+        </div>
+        <div class="col-auto">
+          <button class="btn-primary-k ripple-btn" onclick="showNGOTab('create')">
+            <i class="bi bi-plus-circle me-2"></i>Create Event
+          </button>
+        </div>
+      </div>
+
+      <div class="row g-4">
+
+        <!-- SIDEBAR -->
+        <div class="col-lg-3 reveal visible">
+          <div class="sidebar">
+            <div class="text-center mb-4 pb-4" style="border-bottom:1px solid var(--border)">
+              <div class="k-avatar xl mx-auto mb-3"
+                style="background:linear-gradient(135deg,#1c4a1c,#3a8c2e);font-size:2.5rem">🏢</div>
+              <div style="font-weight:800;font-size:1rem">
+                {{ ngo.organization_name|default:ngo.Full_name|default:"Green Earth Foundation" }}
+              </div>
+              <div style="color:var(--text-muted);font-size:0.82rem">{{ ngo.city|default:"Gurugram, Haryana" }}</div>
+              <div class="d-flex justify-content-center gap-2 mt-2 flex-wrap">
+                <span class="k-badge success">✓ Verified</span>
+                <span class="k-badge">Est. 2018</span>
+              </div>
+            </div>
+            <div class="d-flex flex-column gap-1">
+              <button class="sidebar-link active" onclick="showNGOTab('overview')"><i
+                  class="bi bi-grid-1x2"></i>Overview</button>
+
+              <button class="sidebar-link" onclick="showNGOTab('create')"><i class="bi bi-plus-circle"></i>Create
+                Event</button>
+              <button class="sidebar-link" onclick="showNGOTab('participants')"><i
+                  class="bi bi-people"></i>Participants</button>
+              <button class="sidebar-link" onclick="showNGOTab('credits')"><i class="bi bi-coin"></i>Assign
+                Credits</button>
+              <button class="sidebar-link" onclick="showNGOTab('profile')"><i class="bi bi-building"></i>NGO
+                Profile</button>
+              <div style="height:1px;background:var(--border);margin:0.5rem 0"></div>
+              <button class="sidebar-link" onclick="window.location.href='/login/'" style="color:#d94f4f"><i
+                  class="bi bi-box-arrow-left" style="color:#d94f4f"></i>Sign Out</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONTENT -->
+        <div class="col-lg-9">
+
+          <!-- OVERVIEW TAB -->
+          <div id="ngotab-overview" class="tab-panel">
+            <div class="row g-3 mb-4 reveal visible d-100">
+              <div class="col-6 col-lg-3">
+                <div class="stat-card">
+                  <div
+                    style="color:var(--text-muted);font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.3rem">
+                    Events</div>
+                  <div class="stat-number">12</div>
+                  <div class="stat-label">total events</div>
+                </div>
+              </div>
+              <div class="col-6 col-lg-3">
+                <div class="stat-card">
+                  <div
+                    style="color:var(--text-muted);font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.3rem">
+                    Volunteers</div>
+                  <div class="stat-number">248</div>
+                  <div class="stat-label">total reached</div>
+                </div>
+              </div>
+              <div class="col-6 col-lg-3">
+                <div class="stat-card">
+                  <div
+                    style="color:var(--text-muted);font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.3rem">
+                    Credits</div>
+                  <div class="stat-number">4,800</div>
+                  <div class="stat-label">awarded total</div>
+                </div>
+              </div>
+              <div class="col-6 col-lg-3">
+                <div class="stat-card">
+                  <div
+                    style="color:var(--text-muted);font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.3rem">
+                    Rating</div>
+                  <div class="stat-number">4.9⭐</div>
+                  <div class="stat-label">avg. volunteer rating</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row g-4">
+              <!-- Upcoming -->
+              <div class="col-lg-7 reveal visible d-200">
+                <div class="k-card" style="height:100%">
+                  <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h6 style="font-weight:800;margin:0">Active Events</h6>
+                    <button class="btn-outline-k ripple-btn" style="padding:0.3rem 0.9rem;font-size:0.82rem"
+                      onclick="showNGOTab('create')">+ New</button>
+                  </div>
+                  <div class="d-flex flex-column gap-3">
+                    {% for e in events %}
+                    <div
+                      style="display:flex;align-items:center;gap:1rem;padding:0.9rem;border-radius:var(--radius-sm);border:1px solid var(--border)">
+                      <div
+                        style="width:50px;height:50px;background:linear-gradient(135deg,#1e3a1e,#3a6b2e);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0">
+                        🌲</div>
+                      <div class="flex-grow-1">
+                        <div style="font-weight:700;font-size:0.92rem">{{ e.Event_title }}</div>
+                        <div style="color:var(--text-muted);font-size:0.8rem">{{ e.Event_date }} · {{ e.location }}
+                        </div>
+                        <div class="k-progress mt-1" style="height:5px">
+                          <div class="k-progress-bar" style="width:10%"></div>
+                        </div>
+                      </div>
+                      <div style="text-align:right;flex-shrink:0">
+                        <div style="font-weight:800;font-size:1rem;color:var(--accent)">
+                          {{ e.registered_count|default:"0" }}/{{ e.max_participants|default:'50' }}
+                        </div>
+                        <div style="color:var(--text-muted);font-size:0.75rem">registered</div>
+                      </div>
+                    </div>
+                    {% empty %}
+                    <div style="color:var(--text-muted);padding:1rem;text-align:center;">No events created yet.</div>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+
+              <!-- Recent credits -->
+              <div class="col-lg-5 reveal visible d-300">
+                <div class="k-card" style="height:100%">
+                  <h6 style="font-weight:800;margin-bottom:1rem">Credits to Assign</h6>
+                  <div class="k-alert warning mb-3">
+                    <i class="bi bi-exclamation-triangle flex-shrink-0"></i>
+                    <div><strong>3 events</strong> need credits assigned.</div>
+                  </div>
+                  <div class="d-flex flex-column gap-2">
+                    <div
+                      style="display:flex;justify-content:space-between;align-items:center;padding:0.7rem;border-radius:var(--radius-sm);background:rgba(168,197,126,0.04);border:1px solid var(--border)">
+                      <div>
+                        <div style="font-weight:700;font-size:0.88rem">Beach Cleanup Mar</div>
+                        <div style="color:var(--text-muted);font-size:0.78rem">24 participants</div>
+                      </div>
+                      <button class="btn-primary-k ripple-btn" style="padding:0.35rem 0.9rem;font-size:0.8rem"
+                        onclick="showNGOTab('credits')">Assign</button>
+                    </div>
+                    <div
+                      style="display:flex;justify-content:space-between;align-items:center;padding:0.7rem;border-radius:var(--radius-sm);background:rgba(168,197,126,0.04);border:1px solid var(--border)">
+                      <div>
+                        <div style="font-weight:700;font-size:0.88rem">School Workshop</div>
+                        <div style="color:var(--text-muted);font-size:0.78rem">18 participants</div>
+                      </div>
+                      <button class="btn-primary-k ripple-btn" style="padding:0.35rem 0.9rem;font-size:0.8rem"
+                        onclick="showNGOTab('credits')">Assign</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CREATE EVENT TAB -->
+          <div id="ngotab-create" class="tab-panel" style="display:none">
+            <div class="k-card reveal visible">
+              <h5 style="font-weight:900;margin-bottom:0.3rem">Create New Event</h5>
+              <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:1.8rem">Fill in the details below to
+                publish your event to volunteers.</p>
+              <form action="/ngo-Home/" method="post">
+                {% csrf_token %}
+                <div class="row g-3">
+                  <div class="col-12">
+                    <div class="form-group">
+                      <label class="k-label">Event Title *</label>
+                      <input type="text" name="Event_title" class="k-input"
+                        placeholder="e.g. Aaravali Forest Restoration Drive" required />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="k-label">Event Type *</label>
+                      <input type="text" name="Event_type" class="k-input" placeholder="e.g. Tree Planting" required />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="k-label">Max Participants *</label>
+                      <input type="number" name="max_participants" class="k-input" placeholder="50" min="5" max="500"
+                        required />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="k-label">Event Date *</label>
+                      <input type="date" name="Event_date" class="k-input" required />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="k-label">Start Time</label>
+                      <input type="time" name="Start_time" class="k-input" required />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="k-label">Location / City *</label>
+                      <input type="text" name="location" class="k-input" placeholder="Gurugram, Haryana" required />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="k-label">Green Credits to Award</label>
+                      <input type="number" name="Green_credits" class="k-input" placeholder="80" min="10" max="500"
+                        required />
+                      <small style="color:var(--text-muted);font-size:0.78rem">Recommended: 10 credits per hour of
+                        volunteering</small>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="form-group">
+                      <label class="k-label">Full Address</label>
+                      <input type="text" name="Full_address" class="k-input"
+                        placeholder="Sector 22, Gurugram, Haryana 122001" required />
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="form-group">
+                      <label class="k-label">Event Description *</label>
+                      <textarea name="Event_description" class="k-input" rows="4"
+                        placeholder="Describe the event, what volunteers will do, what to bring, and the environmental impact…"
+                        required></textarea>
+                    </div>
+                  </div>
+
+                  <div class="col-12">
+                    <div class="d-flex gap-3 flex-wrap">
+                      <button class="btn-primary-k ripple-btn" style="padding:0.75rem 2rem" onclick="publishEvent()">
+                        <i class="bi bi-rocket-takeoff me-2"></i>Publish Event
+                      </button>
+                      <button class="btn-outline-k ripple-btn" style="padding:0.75rem 1.5rem">
+                        <i class="bi bi-save me-2"></i>Save Draft
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Success notice (hidden) -->
+                <div id="publishSuccess" style="display:none" class="k-alert success mt-3">
+                  <i class="bi bi-check-circle flex-shrink-0"></i>
+                  <div><strong>Event published!</strong> It's now live and visible to volunteers across India.</div>
+                </div>
+            </div>
+          </div>
+
+          <!-- PARTICIPANTS TAB -->
+          <div id="ngotab-participants" class="tab-panel" style="display:none">
+            <div class="k-card">
+              <div class="d-flex justify-content-between align-items-center mb-4">
+                <h6 style="font-weight:800;margin:0">Registered Volunteers</h6>
+                <div style="min-width:180px">
+                  <select class="k-select" style="padding:0.5rem 2rem 0.5rem 0.8rem;font-size:0.85rem">
+                    <option>Aaravali Forest Drive</option>
+                    <option>Sahibi River Walk</option>
+                    <option>All Events</option>
+                  </select>
+                </div>
+              </div>
+              <div class="table-responsive">
+                <table class="k-table">
+                  <thead>
+                    <tr>
+                      <th>Volunteer</th>
+                      <th>City</th>
+                      <th>Registered</th>
+                      <th>Status</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for reg in registrations %}
+                    <tr>
+                      <td>
+                        <div class="d-flex align-items-center gap-2">
+                          <div class="k-avatar" style="width:36px;height:36px;font-size:0.85rem">
+                            {{ reg.volunteer.Full_name|make_list|first|upper }}
+                          </div>
+                          <span style="font-weight:600">
+                            {{ reg.volunteer.Full_name }}
+                          </span>
+                          <br />
+                          <small style="color:var(--text-muted);font-size:0.75rem;">
+                            {{ reg.event.Event_title|truncatechars:20 }}
+                          </small>
+                        </div>
+                      </td>
+                      <td style="color:var(--text-muted)">{{ reg.volunteer.city }}</td>
+                      <td style="color:var(--text-muted);font-size:0.85rem">{{ reg.registration_date|date:"M d" }}</td>
+                      <td><span class="k-badge success">Confirmed</span></td>
+                      <td><button class="btn-outline-k ripple-btn"
+                          style="padding:0.3rem 0.8rem;font-size:0.78rem">Message</button></td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                      <td colspan="5" style="text-align:center;color:var(--text-muted);padding:2rem;">No volunteers
+                        registered for your events yet.</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- ASSIGN CREDITS TAB -->
+          <div id="ngotab-credits" class="tab-panel" style="display:none">
+            <div class="k-card">
+              <h6 style="font-weight:800;margin-bottom:0.4rem">Assign Green Credits</h6>
+              <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:1.5rem">Select an event and assign
+                credits to participants who attended.</p>
+
+              <div class="form-group">
+                <label class="k-label">Select Event</label>
+                <select class="k-select" onchange="updateCreditEvent(this)">
+                  <option>— Choose event —</option>
+                  <option>Aaravali Forest Drive (5 Apr)</option>
+                  <option>Beach Cleanup Mar (10 Mar)</option>
+                  <option>School Workshop (15 Mar)</option>
+                </select>
+              </div>
+
+              <div id="creditPanel" style="display:none">
+                <div class="k-alert info mb-4">
+                  <i class="bi bi-info-circle flex-shrink-0"></i>
+                  <div>Select participants who actually attended, then assign credits. Default: 80 credits per
+                    volunteer.</div>
+                </div>
+
+                <div class="table-responsive mb-4">
+                  <table class="k-table">
+                    <thead>
+                      <tr>
+                        <th><input type="checkbox" id="selectAll" style="accent-color:var(--accent)"
+                            onchange="toggleAll(this)" /></th>
+                        <th>Volunteer</th>
+                        <th>Registered</th>
+                        <th>Attended?</th>
+                        <th>Credits</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><input type="checkbox" class="vol-check" style="accent-color:var(--accent)" checked /></td>
+                        <td>
+                          <div class="d-flex align-items-center gap-2">
+                            <div class="k-avatar" style="width:32px;height:32px;font-size:0.8rem">AS</div>Arjun Sharma
+                          </div>
+                        </td>
+                        <td style="color:var(--text-muted);font-size:0.85rem">2 Apr</td>
+                        <td><span class="k-badge success">✓ Yes</span></td>
+                        <td><input type="number" value="80" class="k-input"
+                            style="width:80px;padding:0.3rem 0.5rem;font-size:0.88rem" /></td>
+                      </tr>
+                      <tr>
+                        <td><input type="checkbox" class="vol-check" style="accent-color:var(--accent)" checked /></td>
+                        <td>
+                          <div class="d-flex align-items-center gap-2">
+                            <div class="k-avatar"
+                              style="width:32px;height:32px;font-size:0.8rem;background:linear-gradient(135deg,#1c2f3a,#2c5a4e)">
+                              PR</div>Priya Reddy
+                          </div>
+                        </td>
+                        <td style="color:var(--text-muted);font-size:0.85rem">3 Apr</td>
+                        <td><span class="k-badge success">✓ Yes</span></td>
+                        <td><input type="number" value="80" class="k-input"
+                            style="width:80px;padding:0.3rem 0.5rem;font-size:0.88rem" /></td>
+                      </tr>
+                      <tr>
+                        <td><input type="checkbox" class="vol-check" style="accent-color:var(--accent)" /></td>
+                        <td>
+                          <div class="d-flex align-items-center gap-2">
+                            <div class="k-avatar"
+                              style="width:32px;height:32px;font-size:0.8rem;background:linear-gradient(135deg,#3a2e1a,#6b5520)">
+                              RK</div>Rahul Kumar
+                          </div>
+                        </td>
+                        <td style="color:var(--text-muted);font-size:0.85rem">4 Apr</td>
+                        <td><span class="k-badge danger">✗ No</span></td>
+                        <td><input type="number" value="0" class="k-input"
+                            style="width:80px;padding:0.3rem 0.5rem;font-size:0.88rem" disabled /></td>
+                      </tr>
+                      <tr>
+                        <td><input type="checkbox" class="vol-check" style="accent-color:var(--accent)" checked /></td>
+                        <td>
+                          <div class="d-flex align-items-center gap-2">
+                            <div class="k-avatar"
+                              style="width:32px;height:32px;font-size:0.8rem;background:linear-gradient(135deg,#1e3a1e,#3a6b2e)">
+                              SM</div>Sneha Mehta
+                          </div>
+                        </td>
+                        <td style="color:var(--text-muted);font-size:0.85rem">4 Apr</td>
+                        <td><span class="k-badge success">✓ Yes</span></td>
+                        <td><input type="number" value="80" class="k-input"
+                            style="width:80px;padding:0.3rem 0.5rem;font-size:0.88rem" /></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                  <div style="color:var(--text-muted);font-size:0.9rem">
+                    Total credits to be awarded: <span style="color:var(--accent);font-weight:800;font-size:1.1rem">240
+                      🪙</span> to 3 volunteers
+                  </div>
+                  <button class="btn-primary-k ripple-btn" style="padding:0.75rem 2rem" onclick="assignCredits()">
+                    <i class="bi bi-coin me-2"></i>Assign Credits
+                  </button>
+                </div>
+
+                <div id="assignSuccess" style="display:none" class="k-alert success mt-3">
+                  <i class="bi bi-check-circle flex-shrink-0"></i>
+                  <div><strong>Credits assigned!</strong> Volunteers have been notified.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PROFILE TAB -->
+          <div id="ngotab-profile" class="tab-panel" style="display:none">
+            <div class="k-card">
+              <h6 style="font-weight:800;margin-bottom:1.5rem">NGO Profile</h6>
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <div class="form-group"><label class="k-label">Organization Name</label><input class="k-input"
+                      value="{{ ngo.organization_name|default:'Green Earth Foundation' }}" /></div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group"><label class="k-label">NGO Full Name / Rep</label><input class="k-input"
+                      value="{{ ngo.Full_name|default:'NGO-HR-2018-00124' }}" /></div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group"><label class="k-label">Contact Email</label><input class="k-input"
+                      value="{{ ngo.email|default:'contact@greenearthfoundation.org' }}" /></div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group"><label class="k-label">City</label><input class="k-input"
+                      value="{{ ngo.city|default:'Gurugram, Haryana' }}" /></div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group"><label class="k-label">Focus Area</label><select class="k-select">
+                      <option selected>Tree Planting & Afforestation</option>
+                      <option>Beach Cleanup</option>
+                      <option>River Conservation</option>
+                      <option>Wildlife</option>
+                    </select></div>
+                </div>
+                <div class="col-12">
+                  <div class="form-group"><label class="k-label">About the NGO</label><textarea class="k-input"
+                      rows="4">Green Earth Foundation works to restore native forests across the Aaravali hill range and educate local communities about environmental stewardship.</textarea>
+                  </div>
+                </div>
+                <div class="col-12"><button class="btn-primary-k ripple-btn" style="padding:0.7rem 2rem"><i
+                      class="bi bi-check2 me-2"></i>Save Changes</button></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="{% static 'karuuna.js' %}"></script>
+  <script>
+    function showNGOTab(name) {
+      document.querySelectorAll('.tab-panel').forEach(p => p.style.display = 'none');
+      document.getElementById('ngotab-' + name).style.display = 'block';
+      document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+      if (event && event.currentTarget) event.currentTarget.classList.add('active');
+    }
+
+    function publishEvent() {
+      document.getElementById('publishSuccess').style.display = 'flex';
+      document.getElementById('publishSuccess').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function updateCreditEvent(sel) {
+      document.getElementById('creditPanel').style.display = sel.value.startsWith('—') ? 'none' : 'block';
+    }
+
+    function assignCredits() {
+      const el = document.getElementById('assignSuccess');
+      el.style.display = 'flex';
+      el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function toggleAll(cb) {
+      document.querySelectorAll('.vol-check').forEach(c => c.checked = cb.checked);
+    }
+  </script>
+</body>
+
+</html>

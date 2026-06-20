@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Join Karuuna — Sign Up</title>
+  <link rel="icon" href="{% static 'image/weblogo.png' %}">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <link rel="stylesheet" href="{% static 'karuuna.css' %}" />
+</head>
+
+<body>
+
+  <div id="page-transition"></div>
+
+  <!-- NAVBAR -->
+  <nav id="mainNav" class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href='/index/'><img src="{% static 'image/weblogo.png' %}" alt="logo"
+          width="30">Karuuna</a>
+      <div class="d-flex align-items-center gap-3">
+        <span style="color:var(--text-muted);font-size:0.9rem">Already have an account?</span>
+        <a href='/login/' class="btn-outline-k ripple-btn" style="padding:0.4rem 1.1rem;font-size:0.88rem">Sign
+          In</a>
+        <button id="themeToggle" title="Toggle theme">
+          <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BLOBS -->
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2" style="opacity:0.15"></div>
+
+  <!-- MAIN -->
+  <main style="min-height:100vh;display:flex;align-items:center;padding:7rem 0 4rem;position:relative;">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-5 col-md-7">
+
+          <!-- Step 1: Role Selection -->
+          <div id="step-role" class="auth-card reveal visible">
+            <div class="text-center mb-4">
+              <div class="hero-eyebrow">Step 1 of 2</div>
+              <div class="auth-title">Join Karuuna </div>
+              <div class="auth-sub">How would you like to participate?</div>
+            </div>
+
+            <div class="role-toggle mb-4">
+              <div class="role-option selected" id="role-volunteer" onclick="selectRole('volunteer')">
+                <div class="role-icon">🙋</div>
+                <div class="role-name">Volunteer</div>
+                <div class="role-desc">Discover & join eco events</div>
+              </div>
+              <div class="role-option" id="role-ngo" onclick="selectRole('ngo')">
+                <div class="role-icon">🏢</div>
+                <div class="role-name">NGO / Org</div>
+                <div class="role-desc">Create & manage events</div>
+              </div>
+            </div>
+
+            <button class="btn-primary-k ripple-btn w-100" onclick="goToStep2()" style="padding:0.85rem">
+              Continue <i class="bi bi-arrow-right ms-2"></i>
+            </button>
+
+
+
+            <p class="text-center mt-3" style="color:var(--text-muted);font-size:0.82rem">
+              By joining, you agree to our <a href="#" style="color:var(--accent)">Terms</a> and <a href="#"
+                style="color:var(--accent)">Privacy Policy</a>.
+            </p>
+          </div>
+
+          <!-- Step 2: Account Details -->
+          <div id="step-details" class="auth-card" style="display:none">
+            <div class="text-center mb-4">
+              <div class="hero-eyebrow">Step 2 of 2</div>
+              <div class="auth-title" id="step2-title">Volunteer Details</div>
+              <div class="auth-sub">Create your Karuuna account</div>
+            </div>
+
+            <div class="form-group">
+              <form class="job-post-from" method="post" action="" enctype="multipart/form-data">{% csrf_token %}
+                <input type="hidden" name="role" id="role" value="volunteer" />
+
+                <label class="k-label">Full_Name</label>
+                <input type="text" class="k-input" name="Full_name" id="Full_name" placeholder="Your Name" />
+            </div>
+
+            <div class="form-group" id="org-name-group" style="display:none">
+              <label class="k-label">Organization_Name</label>
+              <input type="text" class="k-input" name="organization_name" id="organization_name" placeholder="Your Organization Name" />
+            </div>
+
+            <div class="form-group">
+              <label class="k-label">Email</label>
+              <input type="email" class="k-input" name="email" id="email" placeholder="you@example.com" />
+            </div>
+
+            <div class="form-group">
+              <label class="k-label">City</label>
+              <input type="text" class="k-input" name="city" id="city" placeholder="Your City" />
+            </div>
+
+            <div class="form-group">
+              <label class="k-label">Password</label>
+              <div style="position:relative">
+                <input type="password" class="k-input" name="password" id="pwdField" placeholder="Min. 8 characters"
+                  style="padding-right:3rem" />
+                <button onclick="togglePwd()"
+                  style="position:absolute;right:0.9rem;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:1rem">
+                  <i class="bi bi-eye" id="pwdEye"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Password strength -->
+            <div class="mb-4">
+              <div class="d-flex justify-content-between mb-1">
+                <span style="font-size:0.78rem;color:var(--text-muted)">Password strength</span>
+                <span style="font-size:0.78rem;color:var(--accent)" id="pwdStrengthLabel">—</span>
+              </div>
+              <div class="k-progress">
+                <div class="k-progress-bar" id="pwdBar" style="width:0%"></div>
+              </div>
+            </div>
+
+            <div class="d-flex gap-3">
+              <button class="btn-outline-k ripple-btn" onclick="backToStep1()" style="padding:0.75rem 1.4rem">
+                <i class="bi bi-arrow-left me-1"></i> Back
+              </button>
+              <button class="btn-primary-k ripple-btn flex-grow-1" onclick="handleCTA(this,'volunteer-dashboard.html')"
+                style="padding:0.85rem" id="submit-btn">
+                <i class="bi bi-rocket-takeoff me-2"></i>Create Account
+              </button>
+            </div>
+          </div>
+
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="{% static 'karuuna.js' %}"></script>
+  <script>
+    let selectedRole = 'volunteer';
+
+    function selectRole(role) {
+      selectedRole = role;
+      document.getElementById('role').value = role;
+      document.getElementById('role-volunteer').classList.toggle('selected', role === 'volunteer');
+      document.getElementById('role-ngo').classList.toggle('selected', role === 'ngo');
+    }
+
+    function goToStep2() {
+      document.getElementById('step-role').style.display = 'none';
+      const step2 = document.getElementById('step-details');
+      step2.style.display = 'block';
+      step2.classList.add('reveal', 'visible');
+      document.getElementById('step2-title').textContent = selectedRole === 'ngo' ? 'NGO Details' : 'Your Details';
+      document.getElementById('org-name-group').style.display = selectedRole === 'ngo' ? 'block' : 'none';
+      document.getElementById('submit-btn').onclick = function () {
+        handleCTA(this, selectedRole === 'ngo' ? 'ngo-dashboard.html' : 'volunteer-dashboard.html');
+      };
+    }
+
+    function backToStep1() {
+      document.getElementById('step-details').style.display = 'none';
+      document.getElementById('step-role').style.display = 'block';
+    }
+
+    function togglePwd() {
+      const f = document.getElementById('pwdField');
+      const eye = document.getElementById('pwdEye');
+      f.type = f.type === 'password' ? 'text' : 'password';
+      eye.className = f.type === 'password' ? 'bi bi-eye' : 'bi bi-eye-slash';
+    }
+
+    // Password strength
+    document.addEventListener('input', function (e) {
+      if (!e.target.closest('#pwdField')) return;
+      const v = e.target.value;
+      let score = 0;
+      if (v.length >= 8) score++;
+      if (/[A-Z]/.test(v)) score++;
+      if (/[0-9]/.test(v)) score++;
+      if (/[^A-Za-z0-9]/.test(v)) score++;
+      const widths = ['0%', '25%', '50%', '75%', '100%'];
+      const labels = ['—', 'Weak', 'Fair', 'Good', 'Strong'];
+      document.getElementById('pwdBar').style.width = widths[score];
+      document.getElementById('pwdStrengthLabel').textContent = labels[score];
+    });
+  </script>
+</body>
+
+</html>
